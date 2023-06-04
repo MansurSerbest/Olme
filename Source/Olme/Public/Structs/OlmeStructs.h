@@ -19,7 +19,7 @@ public:
 };
 
 USTRUCT(BlueprintType)
-struct FCharacterData : public FTableRowBase
+struct FChampionData : public FTableRowBase
 {
 	GENERATED_BODY()
  
