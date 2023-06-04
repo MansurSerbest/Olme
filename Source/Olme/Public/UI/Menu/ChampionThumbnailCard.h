@@ -16,6 +16,9 @@ class OLME_API UChampionThumbnailCard : public UUserWidget
 {
 	GENERATED_BODY()
 
+public:
+	void Setup(UTexture2D* ThumbnailTexture, const FText& ChampionNameText);
+	
 protected:
 	virtual void NativeConstruct() override;
 
