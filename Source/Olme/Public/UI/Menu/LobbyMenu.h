@@ -20,24 +20,35 @@ class OLME_API ULobbyMenu : public UUserWidget
 {
 	GENERATED_BODY()
 
+public:
+	ULobbyMenu(const FObjectInitializer& ObjectInitializer);
+	
 protected:
 	virtual void NativeConstruct() override;
 
 private:
 	void FillChampionsGrid();
 
+	UFUNCTION()
+	void ChangeLevelLeft();
+
+	UFUNCTION()
+	void ChangeLevelRight();
+
+	void ChangeLevel(int32 direction);
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UVerticalBox* PlayerInfoList;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	UButton* ChooseMapButtonLeft;
+	UButton* ChooseLevelButtonLeft;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	UButton* ChooseMapButtonRight;
+	UButton* ChooseLevelButtonRight;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	UTextBlock* MapName;
+	UTextBlock* LevelName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UImage* LevelThumbnail;
@@ -52,11 +63,14 @@ protected:
 	TSubclassOf<UUserWidget> ChampionCardClass;
 
 	UPROPERTY(EditAnywhere, Category = LobbyDefaults)
-	TSoftObjectPtr<UDataTable> MapsDatatable;
+	TSoftObjectPtr<UDataTable> LevelDatatable;
 
 	UPROPERTY(EditAnywhere, Category = LobbyDefaults)
 	TSoftObjectPtr<UDataTable> ChampionsDatatable;
 
 	UPROPERTY(EditAnywhere, Category = LobbyDefaults)
 	int32 NrOfColumsChampionsGrid;
+
+private:
+	int32 CurrentLevelIdx;
 };
