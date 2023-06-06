@@ -19,9 +19,15 @@ public class Olme : ModuleRules
 			, "OnlineSessionManager"
 			, "OnlineSubsystem"
 			, "OnlineSubsystemUtils"
+			, "PlayFab"
+			, "PlayFabCpp"
+			, "PlayFabCommon"
 		});
 
-		PrivateDependencyModuleNames.AddRange(new string[] { });
+		PrivateDependencyModuleNames.AddRange(new string[]
+		{
+			"AccountManager"
+		});
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });

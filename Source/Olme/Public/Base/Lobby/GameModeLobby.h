@@ -13,5 +13,7 @@ UCLASS()
 class OLME_API AGameModeLobby : public AGameMode
 {
 	GENERATED_BODY()
-	
+
+protected:
+	virtual void OnPostLogin(AController* NewPlayer) override;
 };

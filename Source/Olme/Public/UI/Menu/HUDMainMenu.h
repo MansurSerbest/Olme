@@ -13,5 +13,11 @@ UCLASS()
 class OLME_API AHUDMainMenu : public AHUD
 {
 	GENERATED_BODY()
+
+protected:
+	virtual void BeginPlay() override;
+	
+	UPROPERTY(EditDefaultsOnly, Category = Widget)
+	TSubclassOf<UUserWidget> BaseWidgetClass;
 	
 };
