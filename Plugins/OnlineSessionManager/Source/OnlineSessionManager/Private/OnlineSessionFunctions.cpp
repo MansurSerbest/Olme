@@ -9,7 +9,6 @@
 USessionSubsystem* UOnlineSessionFunctions::GetSessionSubsystem(const UObject* WorldContextObject)
 {
 	const UGameInstance* GameInstance = UGameplayStatics::GetGameInstance(WorldContextObject);
-	//USessionSubsystem* SessionSubsystem = WorldContextObject->GetWorld()->GetSubsystem<USessionSubsystem>();
 	USessionSubsystem* SessionSubsystem = GameInstance->GetSubsystem<USessionSubsystem>();
 
 	return SessionSubsystem;
