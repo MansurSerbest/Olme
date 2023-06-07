@@ -12,6 +12,20 @@ ULobbyMenu::ULobbyMenu(const FObjectInitializer& ObjectInitializer)
 {
 }
 
+void ULobbyMenu::UpdatePlayerList(const TArray<FLobbyPlayerData>& PlayerData)
+{
+	int32 counter = 1;
+	for(const FLobbyPlayerData& Data : PlayerData)
+	{
+		ULobbyPlayerEntry* EntryWidget = CreateWidget<ULobbyPlayerEntry>(GetOwningPlayer(), PlayerInfoEntryClass);
+		EntryWidget->Setup(FText::AsNumber(Data.ListIdx), Data.DisplayName);
+		if(IsValid(EntryWidget))
+		{
+			PlayerInfoList->AddChildToVerticalBox(EntryWidget);
+		}
+	}
+}
+
 void ULobbyMenu::NativeConstruct()
 {
 	Super::NativeConstruct();

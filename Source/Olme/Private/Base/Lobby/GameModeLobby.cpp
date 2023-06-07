@@ -3,7 +3,24 @@
 
 #include "Base/Lobby/GameModeLobby.h"
 
+#include "Base/Lobby/PlayerControllerLobby.h"
+#include "Olme/Olme.h"
+#include "UI/Menu/LobbyMenu.h"
+
 void AGameModeLobby::OnPostLogin(AController* NewPlayer)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Postlogin! Player: %s"), *NewPlayer->GetName());
+	UE_LOG(LogOlme, Log, TEXT("Postlogin! Player: %s"), *NewPlayer->GetName());
+	
+	if(APlayerControllerLobby* PC = Cast<APlayerControllerLobby>(NewPlayer))
+	{
+		LoggedInPlayerControllers.Add(PC);
+	}
+}
+
+void AGameModeLobby::OnHudBeginplayFinished()
+{
+	for(APlayerControllerLobby* PC : LoggedInPlayerControllers)
+	{
+		PC->UpdatePlayerList();
+	}
 }

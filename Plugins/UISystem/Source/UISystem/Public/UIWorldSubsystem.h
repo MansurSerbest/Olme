@@ -30,6 +30,9 @@ public:
 	//These functions pop widget
 	UUserWidget* PopWidget();
 
+	//These functions get widget data
+	UUserWidget* GetActiveWidget();
+
 private:
 	UPROPERTY()
 	TArray<UUserWidget*> WidgetStack;

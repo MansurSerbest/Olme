@@ -4,7 +4,7 @@
 #include "UI/Menu/RegisterMenu.h"
 #include "AccountManagerFunctions.h"
 #include "AccountManagerSubsystem.h"
-#include "UISystemBPLibrary.h"
+#include "UISystemFunctions.h"
 #include "Components/Button.h"
 #include "Components/CircularThrobber.h"
 #include "Components/EditableText.h"
@@ -30,7 +30,7 @@ void URegisterMenu::RegisterPlayfabAccount()
 
 void URegisterMenu::Back()
 {
-	UUISystemBPLibrary::ReplaceWidgetFromClass(GetOwningPlayer(), LoginWidgetClass);
+	UUISystemFunctions::ReplaceWidgetFromClass(GetOwningPlayer(), LoginWidgetClass);
 }
 
 void URegisterMenu::OnRegisterFinished(bool Result)
@@ -38,7 +38,7 @@ void URegisterMenu::OnRegisterFinished(bool Result)
 	UAccountManagerFunctions::GetSubsystem(GetOwningPlayer())->OnRegisterPlayfabAccountDelegate.Remove(OnRegisterFinishedDelegateHandle);
 	if(Result)
 	{
-		UUISystemBPLibrary::ReplaceWidgetFromClass(GetOwningPlayer(), MenuWidgetClass);
+		UUISystemFunctions::ReplaceWidgetFromClass(GetOwningPlayer(), MenuWidgetClass);
 	}
 	else
 	{

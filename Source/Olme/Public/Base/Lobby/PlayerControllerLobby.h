@@ -13,5 +13,11 @@ UCLASS()
 class OLME_API APlayerControllerLobby : public APlayerController
 {
 	GENERATED_BODY()
+
+public:
+	UFUNCTION(Server, Reliable)
+	void OnHudBeginplayFinished();
 	
+	UFUNCTION(Client, Reliable)
+	void UpdatePlayerList();
 };

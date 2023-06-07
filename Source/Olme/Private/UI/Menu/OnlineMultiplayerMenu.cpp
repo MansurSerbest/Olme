@@ -3,7 +3,7 @@
 
 #include "UI/Menu/OnlineMultiplayerMenu.h"
 
-#include "UISystemBPLibrary.h"
+#include "UISystemFunctions.h"
 #include "UI/Menu/FindSessionMenu.h"
 
 void UOnlineMultiplayerMenu::NativeConstruct()
@@ -37,5 +37,5 @@ void UOnlineMultiplayerMenu::OnOptionsPressed()
 
 void UOnlineMultiplayerMenu::OnBackPressed()
 {
-	UUISystemBPLibrary::PopWidget(GetOwningPlayer());
+	UUISystemFunctions::PopWidget(GetOwningPlayer());
 }

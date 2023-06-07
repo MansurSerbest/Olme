@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ChampionThumbnailCard.h"
+#include "LobbyPlayerEntry.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
 #include "Components/GridPanel.h"
@@ -10,6 +12,7 @@
 #include "Components/TextBlock.h"
 #include "Components/VerticalBox.h"
 #include "Engine/DataTable.h"
+#include "Structs/OlmeStructs.h"
 #include "LobbyMenu.generated.h"
 
 /**
@@ -22,6 +25,8 @@ class OLME_API ULobbyMenu : public UUserWidget
 
 public:
 	ULobbyMenu(const FObjectInitializer& ObjectInitializer);
+
+	void UpdatePlayerList(const TArray<FLobbyPlayerData>& PlayerData);
 	
 protected:
 	virtual void NativeConstruct() override;
@@ -57,10 +62,10 @@ protected:
 	UGridPanel* ChampionGridPanel;
 
 	UPROPERTY(EditAnywhere, Category = LobbyDefaults)
-	TSubclassOf<UUserWidget> PlayerInfoEntryClass;
+	TSubclassOf<ULobbyPlayerEntry> PlayerInfoEntryClass;
 
 	UPROPERTY(EditAnywhere, Category = LobbyDefaults)
-	TSubclassOf<UUserWidget> ChampionCardClass;
+	TSubclassOf<UChampionThumbnailCard> ChampionCardClass;
 
 	UPROPERTY(EditAnywhere, Category = LobbyDefaults)
 	TSoftObjectPtr<UDataTable> LevelDatatable;

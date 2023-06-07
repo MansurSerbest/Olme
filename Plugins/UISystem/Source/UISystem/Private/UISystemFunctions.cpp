@@ -1,17 +1,17 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "UISystemBPLibrary.h"
+#include "UISystemFunctions.h"
 #include "UISystem.h"
 #include "Kismet/GameplayStatics.h"
 #include "UIWorldSubsystem.h"
 
-UUISystemBPLibrary::UUISystemBPLibrary(const FObjectInitializer& ObjectInitializer)
+UUISystemFunctions::UUISystemFunctions(const FObjectInitializer& ObjectInitializer)
 : Super(ObjectInitializer)
 {
 
 }
 
-UUserWidget* UUISystemBPLibrary::PushWidgetFromClass(UObject* WorldContextObject, TSubclassOf<UUserWidget> Class, bool bPreviousWidgetVisible)
+UUserWidget* UUISystemFunctions::PushWidgetFromClass(UObject* WorldContextObject, TSubclassOf<UUserWidget> Class, bool bPreviousWidgetVisible)
 {
 	if(UUIWorldSubsystem* Subsystem = GetWorldSubsystem(WorldContextObject))
 	{
@@ -21,9 +21,9 @@ UUserWidget* UUISystemBPLibrary::PushWidgetFromClass(UObject* WorldContextObject
 	return nullptr;
 }
 
-UUserWidget* UUISystemBPLibrary::PushWidgetFromInstance(UObject* WorldContextObject, UUserWidget* NewWidget, bool bPreviousWidgetVisible)
+UUserWidget* UUISystemFunctions::PushWidgetFromInstance(UObject* WorldContextObject, UUserWidget* NewWidget, bool bPreviousWidgetVisible)
 {
-	if(UUIWorldSubsystem* Subsystem = UUISystemBPLibrary::GetWorldSubsystem(WorldContextObject))
+	if(UUIWorldSubsystem* Subsystem = UUISystemFunctions::GetWorldSubsystem(WorldContextObject))
 	{
 		return Subsystem->PushWidgetFromInstance(NewWidget, bPreviousWidgetVisible);
 	}
@@ -31,9 +31,9 @@ UUserWidget* UUISystemBPLibrary::PushWidgetFromInstance(UObject* WorldContextObj
 	return nullptr;
 }
 
-UUserWidget* UUISystemBPLibrary::ReplaceWidgetFromClass(UObject* WorldContextObject, TSubclassOf<UUserWidget> Class)
+UUserWidget* UUISystemFunctions::ReplaceWidgetFromClass(UObject* WorldContextObject, TSubclassOf<UUserWidget> Class)
 {
-	if(UUIWorldSubsystem* Subsystem = UUISystemBPLibrary::GetWorldSubsystem(WorldContextObject))
+	if(UUIWorldSubsystem* Subsystem = UUISystemFunctions::GetWorldSubsystem(WorldContextObject))
 	{
 		return Subsystem->ReplaceWidgetFromClass(Class, true);
 	}
@@ -41,7 +41,7 @@ UUserWidget* UUISystemBPLibrary::ReplaceWidgetFromClass(UObject* WorldContextObj
 	return nullptr;
 }
 
-UUserWidget* UUISystemBPLibrary::ReplaceWidgetFromInstance(UObject* WorldContextObject, UUserWidget* NewWidget)
+UUserWidget* UUISystemFunctions::ReplaceWidgetFromInstance(UObject* WorldContextObject, UUserWidget* NewWidget)
 {
 	if(UUIWorldSubsystem* Subsystem = GetWorldSubsystem(WorldContextObject))
 	{
@@ -51,7 +51,7 @@ UUserWidget* UUISystemBPLibrary::ReplaceWidgetFromInstance(UObject* WorldContext
 	return nullptr;
 }
 
-UUserWidget* UUISystemBPLibrary::PopWidget(UObject* WorldContextObject)
+UUserWidget* UUISystemFunctions::PopWidget(UObject* WorldContextObject)
 {
 	if(UUIWorldSubsystem* Subsystem = GetWorldSubsystem(WorldContextObject))
 	{
@@ -61,7 +61,18 @@ UUserWidget* UUISystemBPLibrary::PopWidget(UObject* WorldContextObject)
 	return nullptr;
 }
 
-UUIWorldSubsystem* UUISystemBPLibrary::GetWorldSubsystem(UObject* WorldContextObject)
+UUserWidget* UUISystemFunctions::GetActiveWidget(UObject* WorldContextObject)
+{
+	UUIWorldSubsystem* Subsystem = GetWorldSubsystem(WorldContextObject);
+	if(Subsystem)
+	{
+		return Subsystem->GetActiveWidget();
+	}
+
+	return nullptr;
+}
+
+UUIWorldSubsystem* UUISystemFunctions::GetWorldSubsystem(UObject* WorldContextObject)
 {
 	const UGameInstance* GameInstance = UGameplayStatics::GetGameInstance(WorldContextObject);
 	if(!GameInstance)

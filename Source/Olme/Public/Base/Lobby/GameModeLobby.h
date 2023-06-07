@@ -6,6 +6,7 @@
 #include "GameFramework/GameMode.h"
 #include "GameModeLobby.generated.h"
 
+class APlayerControllerLobby;
 /**
  * 
  */
@@ -14,6 +15,13 @@ class OLME_API AGameModeLobby : public AGameMode
 {
 	GENERATED_BODY()
 
+public:
+	void OnHudBeginplayFinished();
+	
 protected:
 	virtual void OnPostLogin(AController* NewPlayer) override;
+
+private:
+	UPROPERTY()
+	TArray<APlayerControllerLobby*> LoggedInPlayerControllers;
 };
