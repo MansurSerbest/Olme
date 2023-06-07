@@ -2,6 +2,7 @@
 
 #include "AccountManager.h"
 
+DEFINE_LOG_CATEGORY(LogAccountManager);
 #define LOCTEXT_NAMESPACE "FAccountManagerModule"
 
 void FAccountManagerModule::StartupModule()

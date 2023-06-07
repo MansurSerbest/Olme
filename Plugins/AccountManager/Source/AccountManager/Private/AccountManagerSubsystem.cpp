@@ -3,6 +3,7 @@
 
 #include "AccountManagerSubsystem.h"
 
+#include "AccountManager.h"
 #include "PlayFab.h"
 #include "PlayFabClientDataModels.h"
 #include "Core/PlayFabClientAPI.h"
@@ -30,13 +31,13 @@ void UAccountManagerSubsystem::RegisterPlayfabAccount(const FString& Email, cons
 
 void UAccountManagerSubsystem::OnRegisterSuccess(const PlayFab::ClientModels::FRegisterPlayFabUserResult& Result)
 {
-	UE_LOG(LogTemp, Warning, TEXT("REGISTERING SUCCESSFUL!"));
+	UE_LOG(LogAccountManager, Verbose, TEXT("REGISTERING SUCCESSFUL!"));
 	OnRegisterPlayfabAccountDelegate.Broadcast(true);
 }
 
 void UAccountManagerSubsystem::OnRegisterFailed(const PlayFab::FPlayFabCppError& Result)
 {
-	UE_LOG(LogTemp, Warning, TEXT("REGISTERING FAILED!"));
+	UE_LOG(LogAccountManager, Warning, TEXT("REGISTERING FAILED!"));
 	OnRegisterPlayfabAccountDelegate.Broadcast(false);
 }
 
@@ -63,12 +64,12 @@ void UAccountManagerSubsystem::LoginPlayfabAccount(const FString& UsernameOrEmai
 void UAccountManagerSubsystem::OnLoginSuccess(const PlayFab::ClientModels::FLoginResult& Result)
 {
 	UsernameCached = Result.PlayFabId;
-	UE_LOG(LogTemp, Warning, TEXT("LOGIN SUCCESSFUL! Playerfab id: %s"), *UsernameCached);
+	UE_LOG(LogAccountManager, Verbose, TEXT("LOGIN SUCCESSFUL! Playerfab id: %s"), *UsernameCached);
 	OnLoginPlayfabAccountDelegate.Broadcast(true);
 }
 
 void UAccountManagerSubsystem::OnLoginFailed(const PlayFab::FPlayFabCppError& Result)
 {
-	UE_LOG(LogTemp, Warning, TEXT("LOGIN FAILED!"));
+	UE_LOG(LogAccountManager, Warning, TEXT("LOGIN FAILED!"));
 	OnLoginPlayfabAccountDelegate.Broadcast(false);
 }
