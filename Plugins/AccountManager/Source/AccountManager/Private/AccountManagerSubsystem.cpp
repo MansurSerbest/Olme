@@ -22,21 +22,25 @@ void UAccountManagerSubsystem::RegisterPlayfabAccount(const FString& Email, cons
 	PlayFab::FPlayFabErrorDelegate FailureDelegate;
 	FailureDelegate.BindUObject(this, &UAccountManagerSubsystem::OnRegisterFailed);
 	
-	ClientAPI->RegisterPlayFabUser(Request, SuccessDelegate, FailureDelegate);
+	if(!ClientAPI->RegisterPlayFabUser(Request, SuccessDelegate, FailureDelegate))
+	{
+		OnRegisterPlayfabAccountDelegate.Broadcast(false);
+	}
 }
 
 void UAccountManagerSubsystem::OnRegisterSuccess(const PlayFab::ClientModels::FRegisterPlayFabUserResult& Result)
 {
 	UE_LOG(LogTemp, Warning, TEXT("REGISTERING SUCCESSFUL!"));
+	OnRegisterPlayfabAccountDelegate.Broadcast(true);
 }
 
 void UAccountManagerSubsystem::OnRegisterFailed(const PlayFab::FPlayFabCppError& Result)
 {
 	UE_LOG(LogTemp, Warning, TEXT("REGISTERING FAILED!"));
+	OnRegisterPlayfabAccountDelegate.Broadcast(false);
 }
 
-void UAccountManagerSubsystem::LoginPlayfabAccount(const FString& UsernameOrEmail,
-	const FString& Password)
+void UAccountManagerSubsystem::LoginPlayfabAccount(const FString& UsernameOrEmail, const FString& Password)
 {
 	const PlayFabClientPtr ClientAPI = IPlayFabModuleInterface::Get().GetClientAPI();
 
@@ -48,18 +52,23 @@ void UAccountManagerSubsystem::LoginPlayfabAccount(const FString& UsernameOrEmai
 	SuccessDelegate.BindUObject(this, &UAccountManagerSubsystem::OnLoginSuccess);
 
 	PlayFab::FPlayFabErrorDelegate FailureDelegate;
-	FailureDelegate.BindUObject(this, &UAccountManagerSubsystem::OnRegisterFailed);
+	FailureDelegate.BindUObject(this, &UAccountManagerSubsystem::OnLoginFailed);
 	
-	ClientAPI->LoginWithPlayFab(Request, SuccessDelegate, FailureDelegate);
-	
+	if(!ClientAPI->LoginWithPlayFab(Request, SuccessDelegate, FailureDelegate))
+	{
+		OnLoginPlayfabAccountDelegate.Broadcast(false);
+	}
 }
 
 void UAccountManagerSubsystem::OnLoginSuccess(const PlayFab::ClientModels::FLoginResult& Result)
 {
-	UE_LOG(LogTemp, Warning, TEXT("LOGIN SUCCESSFUL!"));
+	UsernameCached = Result.PlayFabId;
+	UE_LOG(LogTemp, Warning, TEXT("LOGIN SUCCESSFUL! Playerfab id: %s"), *UsernameCached);
+	OnLoginPlayfabAccountDelegate.Broadcast(true);
 }
 
 void UAccountManagerSubsystem::OnLoginFailed(const PlayFab::FPlayFabCppError& Result)
 {
 	UE_LOG(LogTemp, Warning, TEXT("LOGIN FAILED!"));
+	OnLoginPlayfabAccountDelegate.Broadcast(false);
 }

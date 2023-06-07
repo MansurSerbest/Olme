@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/CircularThrobber.h"
+#include "Components/TextBlock.h"
 #include "LoginMenu.generated.h"
 
 
@@ -23,6 +25,11 @@ protected:
 private:
 	UFUNCTION()
 	void LoginPlayfabAccount();
+
+	UFUNCTION()
+	void RegisterAccount();
+
+	void OnLoginFinished(bool Result);
 	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
@@ -36,4 +43,19 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UEditableText* PasswordPrompt;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UTextBlock* RetryText;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UCircularThrobber* LoginInThrobber;
+
+	UPROPERTY(EditDefaultsOnly, Category = DefaultClasses)
+	TSubclassOf<UUserWidget> RegisterAccountWidgetClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = DefaultClasses)
+	TSubclassOf<UUserWidget> MenuWidgetClass;
+
+private:
+	FDelegateHandle OnLoginFinishedDelegateHandle;
 };
