@@ -8,6 +8,9 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "AccountManagerSubsystem.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnRegisterPlayfabAccountDelegate, bool);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnLoginPlayfabAccountDelegate, bool);
+
 /**
  * 
  */
@@ -18,10 +21,12 @@ class ACCOUNTMANAGER_API UAccountManagerSubsystem : public UGameInstanceSubsyste
 
 public:
 	void RegisterPlayfabAccount(const FString& Email, const FString& Username, const FString& Password);
+	FOnRegisterPlayfabAccountDelegate OnRegisterPlayfabAccountDelegate;
 	void OnRegisterSuccess(const PlayFab::ClientModels::FRegisterPlayFabUserResult& Result);
 	void OnRegisterFailed(const PlayFab::FPlayFabCppError& Result);
 
 	void LoginPlayfabAccount(const FString& UsernameOrEmail, const FString& Password);
+	FOnLoginPlayfabAccountDelegate OnLoginPlayfabAccountDelegate;
 	void OnLoginSuccess(const PlayFab::ClientModels::FLoginResult& Result);
 	void OnLoginFailed(const PlayFab::FPlayFabCppError& Result);
 	

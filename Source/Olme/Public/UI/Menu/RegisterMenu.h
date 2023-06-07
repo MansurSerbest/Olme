@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PlayFabClientDataModels.h"
-#include "PlayFabError.h"
 #include "Blueprint/UserWidget.h"
-#include "Components/Button.h"
-#include "Components/EditableText.h"
 #include "RegisterMenu.generated.h"
 
 
+class UEditableText;
+class UButton;
+class UCircularThrobber;
+class UTextBlock;
 /**
  * 
  */
@@ -25,6 +25,11 @@ protected:
 private:
 	UFUNCTION()
 	void RegisterPlayfabAccount();
+
+	UFUNCTION()
+	void Back();
+
+	void OnRegisterFinished(bool Result);
 	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
@@ -38,4 +43,22 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UEditableText* PasswordPrompt;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UTextBlock* RetryText;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UButton* BackButton;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UCircularThrobber* RegisteringThrobber;
+
+	UPROPERTY(EditDefaultsOnly, Category = DefaultClasses)
+	TSubclassOf<UUserWidget> MenuWidgetClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = DefaultClasses)
+	TSubclassOf<UUserWidget> LoginWidgetClass;
+
+private:
+	FDelegateHandle OnRegisterFinishedDelegateHandle;
 };

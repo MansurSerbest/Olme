@@ -35,7 +35,7 @@ UUserWidget* UUISystemBPLibrary::ReplaceWidgetFromClass(UObject* WorldContextObj
 {
 	if(UUIWorldSubsystem* Subsystem = UUISystemBPLibrary::GetWorldSubsystem(WorldContextObject))
 	{
-		return Subsystem->ReplaceWidgetFromClass(Class);
+		return Subsystem->ReplaceWidgetFromClass(Class, true);
 	}
 
 	return nullptr;

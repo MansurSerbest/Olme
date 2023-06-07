@@ -6,7 +6,6 @@
 #include "AccountManagerFunctions.generated.h"
 
 class UAccountManagerSubsystem;
-
 /* 
 *	
 */
