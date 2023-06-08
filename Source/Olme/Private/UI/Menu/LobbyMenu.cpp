@@ -2,6 +2,9 @@
 
 
 #include "UI/Menu/LobbyMenu.h"
+
+#include "Base/Lobby/GameStateLobby.h"
+#include "Kismet/GameplayStatics.h"
 #include "Structs/OlmeStructs.h"
 #include "UI/Menu/ChampionThumbnailCard.h"
 
@@ -33,11 +36,21 @@ void ULobbyMenu::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	FillChampionsGrid();
-	ChangeLevel(0);
-
+	// Assign button logic
 	ChooseLevelButtonLeft->OnPressed.AddDynamic(this, &ULobbyMenu::ChangeLevelLeft);
 	ChooseLevelButtonRight->OnPressed.AddDynamic(this, &ULobbyMenu::ChangeLevelRight);
+
+	// Fill in champion grid
+	FillChampionsGrid();
+	// Change level logic
+	ChangeLevel(0);
+	// Update Player List
+	if(AGameStateLobby* GameState = Cast<AGameStateLobby>(UGameplayStatics::GetGameState(this)))
+	{
+		TArray<FLobbyPlayerData> PlayerDataArr;
+		GameState->GetLobbyPlayerData(PlayerDataArr);
+		UpdatePlayerList(PlayerDataArr);
+	}
 }
 
 

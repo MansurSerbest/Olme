@@ -14,6 +14,10 @@ void AGameModeLobby::OnPostLogin(AController* NewPlayer)
 	if(APlayerControllerLobby* PC = Cast<APlayerControllerLobby>(NewPlayer))
 	{
 		LoggedInPlayerControllers.Add(PC);
+		for(APlayerControllerLobby* PlayerController : LoggedInPlayerControllers)
+		{
+			PlayerController->UpdatePlayerList();
+		}
 	}
 }
 

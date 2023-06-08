@@ -11,7 +11,6 @@
 #include "Structs/OlmeStructs.h"
 #include "UI/Menu/LobbyMenu.h"
 
-PRAGMA_DISABLE_OPTIMIZATION
 void APlayerControllerLobby::UpdatePlayerList_Implementation()
 {
 	if(ULobbyMenu* LobbyMenu = Cast<ULobbyMenu>(UUISystemFunctions::GetActiveWidget(this)))
@@ -19,29 +18,13 @@ void APlayerControllerLobby::UpdatePlayerList_Implementation()
 		if(AGameStateLobby* GameState = Cast<AGameStateLobby>(UGameplayStatics::GetGameState(this)))
 		{
 			TArray<FLobbyPlayerData> PlayerDataArr;
-			PlayerDataArr.Reserve(GameState->PlayerArray.Num());
-
-			TArray<APlayerState*> PlayerStateArr = GameState->PlayerArray;
-			for(int32 i = 0; i < PlayerStateArr.Num(); ++i)
-			{
-				if(APlayerStateLobby* LobbyPlayerstate = Cast<APlayerStateLobby>(GameState->PlayerArray[i]))
-				{
-					FLobbyPlayerData PlayerData;
-					PlayerData.ListIdx = i;
-					PlayerData.DisplayName = FText::FromString(LobbyPlayerstate->GetPlayerNameCustom());
-					PlayerDataArr.Add(PlayerData);
-				}
-			}
-
+			GameState->GetLobbyPlayerData(PlayerDataArr);
 			LobbyMenu->UpdatePlayerList(PlayerDataArr);
 		}
 	}
 }
-PRAGMA_ENABLE_OPTIMIZATION
-void APlayerControllerLobby::OnHudBeginplayFinished_Implementation()
+
+void APlayerControllerLobby::BeginPlay()
 {
-	if(AGameModeLobby* GameMode = Cast<AGameModeLobby>(UGameplayStatics::GetGameMode(this)))
-	{
-		GameMode->OnHudBeginplayFinished();
-	}
+	Super::BeginPlay();
 }

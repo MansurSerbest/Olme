@@ -26,5 +26,5 @@ public:
 	static void LoginPlayfabAccount(const UObject* WorldContextObject, const FString& UsernameOrEmail, const FString& Password);
 
 	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-	static FString GetPlayfabId(const UObject* WorldContextObject);
+	static FString GetPlayfabUsername(const UObject* WorldContextObject);
 };
