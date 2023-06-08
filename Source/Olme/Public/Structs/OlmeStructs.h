@@ -27,6 +27,9 @@ struct FChampionData : public FTableRowBase
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UTexture2D* Thumbnail;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	AActor* DisplayModelActor;
 };
 
 USTRUCT(BlueprintType)

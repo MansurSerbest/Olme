@@ -3,7 +3,9 @@
 
 #include "Base/Lobby/PlayerStateLobby.h"
 
+#include "AccountManagerFunctions.h"
+
 FString APlayerStateLobby::GetPlayerNameCustom() const
 {
-	return BP_GetUniqueId().ToString();
+	return UAccountManagerFunctions::GetPlayfabId(this);
 }

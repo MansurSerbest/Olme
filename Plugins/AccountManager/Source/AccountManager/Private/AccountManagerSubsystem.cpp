@@ -33,6 +33,7 @@ void UAccountManagerSubsystem::OnRegisterSuccess(const PlayFab::ClientModels::FR
 {
 	UE_LOG(LogAccountManager, Log, TEXT("REGISTERING SUCCESSFUL!"));
 	OnRegisterPlayfabAccountDelegate.Broadcast(true);
+	PlayfabUsernameCached = Result.PlayFabId;
 }
 
 void UAccountManagerSubsystem::OnRegisterFailed(const PlayFab::FPlayFabCppError& Result)
@@ -63,8 +64,27 @@ void UAccountManagerSubsystem::LoginPlayfabAccount(const FString& UsernameOrEmai
 
 void UAccountManagerSubsystem::OnLoginSuccess(const PlayFab::ClientModels::FLoginResult& Result)
 {
-	UsernameCached = Result.PlayFabId;
-	UE_LOG(LogAccountManager, Log, TEXT("LOGIN SUCCESSFUL! Playerfab id: %s"), *UsernameCached);
+	UE_LOG(LogAccountManager, Log, TEXT("LOGIN SUCCESSFUL! Playerfab id: %s"), *PlayfabUsernameCached);
+	
+	const PlayFabClientPtr ClientAPI = IPlayFabModuleInterface::Get().GetClientAPI();
+
+	// Request
+	PlayFab::ClientModels::FGetAccountInfoRequest Request;
+	// OnSuccess Delegate
+	PlayFab::UPlayFabClientAPI::FGetAccountInfoDelegate OnSucces;
+	OnSucces.BindLambda([&UserName = this->PlayfabUsernameCached](const PlayFab::ClientModels::FGetAccountInfoResult& Result)->void
+	{
+		UserName = Result.AccountInfo->Username;
+	});
+	// OnFailure Delegate
+	PlayFab::FPlayFabErrorDelegate OnFailure;
+	OnFailure.BindLambda([this](const PlayFab::FPlayFabCppError& Result)->void
+	{
+		
+	});
+	// Call Get Account API
+	ClientAPI->GetAccountInfo(Request, OnSucces, OnFailure);
+	
 	OnLoginPlayfabAccountDelegate.Broadcast(true);
 }
 
@@ -72,4 +92,9 @@ void UAccountManagerSubsystem::OnLoginFailed(const PlayFab::FPlayFabCppError& Re
 {
 	UE_LOG(LogAccountManager, Warning, TEXT("LOGIN FAILED!"));
 	OnLoginPlayfabAccountDelegate.Broadcast(false);
+}
+
+FString UAccountManagerSubsystem::GetPlayfabId() const
+{
+	return PlayfabUsernameCached;
 }

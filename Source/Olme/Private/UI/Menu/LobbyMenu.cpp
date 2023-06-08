@@ -14,6 +14,9 @@ ULobbyMenu::ULobbyMenu(const FObjectInitializer& ObjectInitializer)
 
 void ULobbyMenu::UpdatePlayerList(const TArray<FLobbyPlayerData>& PlayerData)
 {
+	// Clear the list before adding new players
+	PlayerInfoList->ClearChildren();
+	
 	int32 counter = 1;
 	for(const FLobbyPlayerData& Data : PlayerData)
 	{

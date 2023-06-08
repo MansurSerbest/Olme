@@ -11,6 +11,7 @@
 #include "Structs/OlmeStructs.h"
 #include "UI/Menu/LobbyMenu.h"
 
+PRAGMA_DISABLE_OPTIMIZATION
 void APlayerControllerLobby::UpdatePlayerList_Implementation()
 {
 	if(ULobbyMenu* LobbyMenu = Cast<ULobbyMenu>(UUISystemFunctions::GetActiveWidget(this)))
@@ -19,8 +20,9 @@ void APlayerControllerLobby::UpdatePlayerList_Implementation()
 		{
 			TArray<FLobbyPlayerData> PlayerDataArr;
 			PlayerDataArr.Reserve(GameState->PlayerArray.Num());
-			
-			for(int32 i = 0; i < GameState->PlayerArray.Num(); ++i)
+
+			TArray<APlayerState*> PlayerStateArr = GameState->PlayerArray;
+			for(int32 i = 0; i < PlayerStateArr.Num(); ++i)
 			{
 				if(APlayerStateLobby* LobbyPlayerstate = Cast<APlayerStateLobby>(GameState->PlayerArray[i]))
 				{
@@ -35,7 +37,7 @@ void APlayerControllerLobby::UpdatePlayerList_Implementation()
 		}
 	}
 }
-
+PRAGMA_ENABLE_OPTIMIZATION
 void APlayerControllerLobby::OnHudBeginplayFinished_Implementation()
 {
 	if(AGameModeLobby* GameMode = Cast<AGameModeLobby>(UGameplayStatics::GetGameMode(this)))
