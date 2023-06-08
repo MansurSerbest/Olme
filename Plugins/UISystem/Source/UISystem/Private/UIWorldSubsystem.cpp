@@ -105,3 +105,13 @@ UUserWidget* UUIWorldSubsystem::PopWidget()
 
 	return nullptr;
 }
+
+UUserWidget* UUIWorldSubsystem::GetActiveWidget()
+{
+	if(WidgetStack.IsValidIndex(0))
+	{
+		return WidgetStack.Last(); 
+	}
+
+	return nullptr;
+}

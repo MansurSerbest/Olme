@@ -13,5 +13,7 @@ UCLASS()
 class OLME_API APlayerStateLobby : public APlayerState
 {
 	GENERATED_BODY()
-	
+
+public:
+	virtual FString GetPlayerNameCustom() const override;
 };

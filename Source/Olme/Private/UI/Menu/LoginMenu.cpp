@@ -5,7 +5,7 @@
 
 #include "AccountManagerFunctions.h"
 #include "AccountManagerSubsystem.h"
-#include "UISystemBPLibrary.h"
+#include "UISystemFunctions.h"
 #include "Components/Button.h"
 #include "Components/EditableText.h"
 #include "Kismet/GameplayStatics.h"
@@ -31,7 +31,7 @@ void ULoginMenu::LoginPlayfabAccount()
 
 void ULoginMenu::RegisterAccount()
 {
-	UUISystemBPLibrary::ReplaceWidgetFromClass(GetOwningPlayer(), RegisterAccountWidgetClass);
+	UUISystemFunctions::ReplaceWidgetFromClass(GetOwningPlayer(), RegisterAccountWidgetClass);
 }
 
 void ULoginMenu::OnLoginFinished(bool Result)
@@ -39,7 +39,7 @@ void ULoginMenu::OnLoginFinished(bool Result)
 	UAccountManagerFunctions::GetSubsystem(GetOwningPlayer())->OnLoginPlayfabAccountDelegate.Remove(OnLoginFinishedDelegateHandle);
 	if(Result)
 	{
-		UUISystemBPLibrary::ReplaceWidgetFromClass(GetOwningPlayer(), MenuWidgetClass);
+		UUISystemFunctions::ReplaceWidgetFromClass(GetOwningPlayer(), MenuWidgetClass);
 	}
 	else
 	{

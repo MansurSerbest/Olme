@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Kismet/BlueprintFunctionLibrary.h"
-#include "UISystemBPLibrary.generated.h"
+#include "UISystemFunctions.generated.h"
 
 /* 
 *	Function library class.
@@ -26,7 +26,7 @@
 class UUIWorldSubsystem;
 
 UCLASS()
-class UISYSTEM_API UUISystemBPLibrary : public UBlueprintFunctionLibrary
+class UISYSTEM_API UUISystemFunctions : public UBlueprintFunctionLibrary
 {
 	GENERATED_UCLASS_BODY()
 
@@ -47,6 +47,10 @@ public:
 	//These functions pop widget
 	UFUNCTION(BlueprintCallable, Category = "UISystem", meta = (WorldContext = "WorldContextObject"))
 	static UUserWidget* PopWidget(UObject* WorldContextObject);
+
+	//These functions get widget data
+	UFUNCTION(BlueprintCallable, Category = "UISystem", meta = (WorldContext = "WorldContextObject"))
+	static UUserWidget* GetActiveWidget(UObject* WorldContextObject);
 
 private:
 	static UUIWorldSubsystem* GetWorldSubsystem(UObject* WorldContextObject);

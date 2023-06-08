@@ -3,12 +3,11 @@
 
 #include "UI/Menu/HUDMainMenu.h"
 
-#include "UISystemBPLibrary.h"
-#include "UIWorldSubsystem.h"
+#include "UISystemFunctions.h"
 
 void AHUDMainMenu::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UUISystemBPLibrary::PushWidgetFromClass(this, BaseWidgetClass);
+	UUISystemFunctions::PushWidgetFromClass(this, BaseWidgetClass);
 }

@@ -4,6 +4,8 @@
 
 #include "Modules/ModuleManager.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(LogAccountManager, Log, All);
+
 class FAccountManagerModule : public IModuleInterface
 {
 public:

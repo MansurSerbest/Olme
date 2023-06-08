@@ -3,7 +3,8 @@
 
 #include "Base/Lobby/HUDLobby.h"
 
-#include "UISystemBPLibrary.h"
+#include "UISystemFunctions.h"
+#include "Base/Lobby/PlayerControllerLobby.h"
 #include "Blueprint/UserWidget.h"
 
 void AHUDLobby::BeginPlay()
@@ -11,5 +12,10 @@ void AHUDLobby::BeginPlay()
 	Super::BeginPlay();
 
 	UUserWidget* Widget = CreateWidget<UUserWidget>(GetOwningPlayerController(), MainWidgetClass);
-	UUISystemBPLibrary::PushWidgetFromInstance(this, Widget);
+	UUISystemFunctions::PushWidgetFromInstance(this, Widget);
+
+	if(APlayerControllerLobby* PC = Cast<APlayerControllerLobby>( GetOwningPlayerController()))
+	{
+		PC->OnHudBeginplayFinished();
+	}
 }

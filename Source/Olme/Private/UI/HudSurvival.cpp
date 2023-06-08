@@ -2,12 +2,12 @@
 
 
 #include "UI/HudSurvival.h"
-#include "UISystemBPLibrary.h"
+#include "UISystemFunctions.h"
 
 
 void AHudSurvival::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UUISystemBPLibrary::PushWidgetFromClass(GetOwningPlayerController(), MainWidgetClass);
+	UUISystemFunctions::PushWidgetFromClass(GetOwningPlayerController(), MainWidgetClass);
 }

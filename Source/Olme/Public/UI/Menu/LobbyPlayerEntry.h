@@ -4,9 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "Components/TextBlock.h"
 #include "LobbyPlayerEntry.generated.h"
 
+class UTextBlock;
 /**
  * 
  */
@@ -14,6 +14,9 @@ UCLASS()
 class OLME_API ULobbyPlayerEntry : public UUserWidget
 {
 	GENERATED_BODY()
+
+public:
+	void Setup(const FText& Number, const FText& Name);
 	
 protected:
 	virtual void NativeConstruct() override;

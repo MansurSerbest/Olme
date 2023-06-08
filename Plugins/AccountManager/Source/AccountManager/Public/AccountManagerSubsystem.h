@@ -18,7 +18,7 @@ UCLASS()
 class ACCOUNTMANAGER_API UAccountManagerSubsystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
-
+	
 public:
 	void RegisterPlayfabAccount(const FString& Email, const FString& Username, const FString& Password);
 	FOnRegisterPlayfabAccountDelegate OnRegisterPlayfabAccountDelegate;
@@ -29,7 +29,9 @@ public:
 	FOnLoginPlayfabAccountDelegate OnLoginPlayfabAccountDelegate;
 	void OnLoginSuccess(const PlayFab::ClientModels::FLoginResult& Result);
 	void OnLoginFailed(const PlayFab::FPlayFabCppError& Result);
+
+	FString GetPlayfabId() const;
 	
 private:
-	FString UsernameCached;
+	FString PlayfabUsernameCached;
 };
