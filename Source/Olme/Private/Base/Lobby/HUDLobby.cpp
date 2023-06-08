@@ -13,9 +13,4 @@ void AHUDLobby::BeginPlay()
 
 	UUserWidget* Widget = CreateWidget<UUserWidget>(GetOwningPlayerController(), MainWidgetClass);
 	UUISystemFunctions::PushWidgetFromInstance(this, Widget);
-
-	if(APlayerControllerLobby* PC = Cast<APlayerControllerLobby>( GetOwningPlayerController()))
-	{
-		PC->OnHudBeginplayFinished();
-	}
 }

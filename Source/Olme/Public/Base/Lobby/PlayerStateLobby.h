@@ -15,5 +15,13 @@ class OLME_API APlayerStateLobby : public APlayerState
 	GENERATED_BODY()
 
 public:
+	APlayerStateLobby();
+	
 	virtual FString GetPlayerNameCustom() const override;
+
+protected:
+	virtual void BeginPlay() override;
+private:
+	UPROPERTY(Replicated)
+	FString NameCustom;
 };

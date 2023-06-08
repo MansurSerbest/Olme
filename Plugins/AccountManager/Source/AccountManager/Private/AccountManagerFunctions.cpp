@@ -28,7 +28,7 @@ void UAccountManagerFunctions::LoginPlayfabAccount(const UObject* WorldContextOb
 	}
 }
 
-FString UAccountManagerFunctions::GetPlayfabId(const UObject* WorldContextObject)
+FString UAccountManagerFunctions::GetPlayfabUsername(const UObject* WorldContextObject)
 {
 	FString ReturnValue;
 	if(UAccountManagerSubsystem* Subsystem = GetSubsystem(WorldContextObject))
