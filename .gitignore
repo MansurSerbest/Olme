@@ -75,3 +75,6 @@ DerivedDataCache/*
 
 # CUSTOM ADDED ONES
 Platforms
+
+#Rider Unreal Link in game
+Plugins/Developer/RiderLink
