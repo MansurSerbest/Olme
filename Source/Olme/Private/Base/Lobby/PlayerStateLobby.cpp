@@ -4,6 +4,7 @@
 #include "Base/Lobby/PlayerStateLobby.h"
 
 #include "AccountManagerFunctions.h"
+#include "Base/Lobby/PlayerControllerLobby.h"
 #include "Net/UnrealNetwork.h"
 
 APlayerStateLobby::APlayerStateLobby()
@@ -30,5 +31,13 @@ void APlayerStateLobby::BeginPlay()
 	if(HasAuthority())
 	{
 		NameCustom = UAccountManagerFunctions::GetPlayfabUsername(this);
+	}
+}
+
+void APlayerStateLobby::OnRep_NameCustom()
+{
+	if(APlayerControllerLobby* PC = Cast<APlayerControllerLobby>(GetPlayerController()))
+	{
+		PC->UpdatePlayerList();
 	}
 }

@@ -21,7 +21,11 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+
 private:
-	UPROPERTY(Replicated)
+	UFUNCTION()
+	void OnRep_NameCustom();
+private:
+	UPROPERTY(ReplicatedUsing = OnRep_NameCustom)
 	FString NameCustom;
 };
