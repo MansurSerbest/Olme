@@ -5,6 +5,11 @@
 
 #include "Base/Lobby/PlayerStateLobby.h"
 
+void AGameStateLobby::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
 void AGameStateLobby::AddPlayerState(APlayerState* PlayerState)
 {
 	Super::AddPlayerState(PlayerState);

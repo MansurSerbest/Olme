@@ -14,6 +14,8 @@ UCLASS()
 class OLME_API AGameStateLobby : public AGameState
 {
 	GENERATED_BODY()
+protected:
+	virtual void BeginPlay() override;
 public:
 	virtual void AddPlayerState(APlayerState* PlayerState) override;
 

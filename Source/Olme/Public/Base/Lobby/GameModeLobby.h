@@ -19,6 +19,7 @@ public:
 	void OnHudBeginplayFinished();
 	
 protected:
+	virtual void BeginPlay() override;
 	virtual void OnPostLogin(AController* NewPlayer) override;
 
 private:

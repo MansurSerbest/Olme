@@ -28,3 +28,8 @@ void AGameModeLobby::OnHudBeginplayFinished()
 		PC->UpdatePlayerList();
 	}
 }
+
+void AGameModeLobby::BeginPlay()
+{
+	Super::BeginPlay();
+}
