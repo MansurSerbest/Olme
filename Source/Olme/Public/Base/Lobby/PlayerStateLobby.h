@@ -25,6 +25,13 @@ protected:
 private:
 	UFUNCTION()
 	void OnRep_NameCustom();
+
+	UFUNCTION(Server, Reliable)
+	void Server_SetCustomName(const FString& Name);
+	
+	UFUNCTION(Server, Reliable)
+	void Server_UpdatePlayerList();
+	
 private:
 	UPROPERTY(ReplicatedUsing = OnRep_NameCustom)
 	FString NameCustom;
