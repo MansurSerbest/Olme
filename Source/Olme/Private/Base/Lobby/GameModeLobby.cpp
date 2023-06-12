@@ -5,7 +5,6 @@
 
 #include "Base/Lobby/PlayerControllerLobby.h"
 #include "Olme/Olme.h"
-#include "UI/Menu/LobbyMenu.h"
 
 void AGameModeLobby::OnPostLogin(AController* NewPlayer)
 {
@@ -21,7 +20,7 @@ void AGameModeLobby::OnPostLogin(AController* NewPlayer)
 	}
 }
 
-void AGameModeLobby::UpdatePlayerList()
+void AGameModeLobby::UpdatePlayerList() const
 {
 	for(APlayerControllerLobby* PlayerController : LoggedInPlayerControllers)
 	{
@@ -32,4 +31,10 @@ void AGameModeLobby::UpdatePlayerList()
 void AGameModeLobby::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// Remove the cached playercontroller if they logout
+	FGameModeEvents::GameModeLogoutEvent.AddLambda([this](AGameModeBase* GameMode, AController* PlayerController)->void
+	{
+		LoggedInPlayerControllers.Remove(Cast<APlayerControllerLobby>(PlayerController));
+	});
 }

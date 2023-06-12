@@ -42,6 +42,9 @@ private:
 
 	void ChangeLevel(int32 direction);
 
+	UFUNCTION()
+	void QuitLobby();
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UVerticalBox* PlayerInfoList;
@@ -61,6 +64,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UGridPanel* ChampionGridPanel;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UButton* QuitLobbyButton;
+
 	UPROPERTY(EditAnywhere, Category = LobbyDefaults)
 	TSubclassOf<ULobbyPlayerEntry> PlayerInfoEntryClass;
 
@@ -72,6 +78,10 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = LobbyDefaults)
 	TSoftObjectPtr<UDataTable> ChampionsDatatable;
+
+	// Level that should open after quitting the lobby
+	UPROPERTY(EditAnywhere, Category = LobbyDefaults)
+	TSoftObjectPtr<UWorld> LevelAfterQuitLobby;
 
 	UPROPERTY(EditAnywhere, Category = LobbyDefaults)
 	int32 NrOfColumsChampionsGrid;

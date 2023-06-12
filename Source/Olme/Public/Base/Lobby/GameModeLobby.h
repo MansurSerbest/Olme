@@ -16,7 +16,7 @@ class OLME_API AGameModeLobby : public AGameMode
 	GENERATED_BODY()
 
 public:
-	void UpdatePlayerList();
+	void UpdatePlayerList() const;
 protected:
 	virtual void BeginPlay() override;
 	virtual void OnPostLogin(AController* NewPlayer) override;

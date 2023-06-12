@@ -13,6 +13,15 @@ void AGameStateLobby::BeginPlay()
 void AGameStateLobby::AddPlayerState(APlayerState* PlayerState)
 {
 	Super::AddPlayerState(PlayerState);
+
+	UE_LOG(LogTemp, Warning, TEXT("AddPlayerState called on %s"), GetNetMode() == NM_Client? *FString("Client") : *FString("Server") );
+}
+
+void AGameStateLobby::RemovePlayerState(APlayerState* PlayerState)
+{
+	Super::RemovePlayerState(PlayerState);
+
+	UE_LOG(LogTemp, Warning, TEXT("RemovePlayerState called on %s"), GetNetMode() == NM_Client? *FString("Client") : *FString("Server") );
 }
 
 void AGameStateLobby::GetLobbyPlayerData(TArray<FLobbyPlayerData>& OutPlayerData)
