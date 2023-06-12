@@ -3,6 +3,7 @@
 
 #include "UI/Menu/LobbyMenu.h"
 
+#include "OnlineSessionFunctions.h"
 #include "Base/Lobby/GameStateLobby.h"
 #include "Kismet/GameplayStatics.h"
 #include "Structs/OlmeStructs.h"
@@ -39,6 +40,7 @@ void ULobbyMenu::NativeConstruct()
 	// Assign button logic
 	ChooseLevelButtonLeft->OnPressed.AddDynamic(this, &ULobbyMenu::ChangeLevelLeft);
 	ChooseLevelButtonRight->OnPressed.AddDynamic(this, &ULobbyMenu::ChangeLevelRight);
+	QuitLobbyButton->OnPressed.AddDynamic(this, &ULobbyMenu::QuitLobby);
 
 	// Fill in champion grid
 	FillChampionsGrid();
@@ -112,4 +114,10 @@ void ULobbyMenu::ChangeLevel(int32 direction)
 			LevelThumbnail->SetBrushFromTexture(LevelDataArr[CurrentLevelIdx]->Thumbnail);
 		}
 	}
+}
+
+void ULobbyMenu::QuitLobby()
+{
+	UGameplayStatics::OpenLevelBySoftObjectPtr(GetOwningPlayer(), LevelAfterQuitLobby);
+	UOnlineSessionFunctions::DestroySession(GetOwningPlayer());
 }
