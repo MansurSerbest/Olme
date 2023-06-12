@@ -21,11 +21,11 @@ void AGameModeLobby::OnPostLogin(AController* NewPlayer)
 	}
 }
 
-void AGameModeLobby::OnHudBeginplayFinished()
+void AGameModeLobby::UpdatePlayerList()
 {
-	for(APlayerControllerLobby* PC : LoggedInPlayerControllers)
+	for(APlayerControllerLobby* PlayerController : LoggedInPlayerControllers)
 	{
-		PC->UpdatePlayerList();
+		PlayerController->UpdatePlayerList();
 	}
 }
 
