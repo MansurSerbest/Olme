@@ -64,8 +64,6 @@ void UAccountManagerSubsystem::LoginPlayfabAccount(const FString& UsernameOrEmai
 
 void UAccountManagerSubsystem::OnLoginSuccess(const PlayFab::ClientModels::FLoginResult& Result)
 {
-	UE_LOG(LogAccountManager, Log, TEXT("LOGIN SUCCESSFUL! Playerfab id: %s"), *PlayfabUsernameCached);
-	
 	const PlayFabClientPtr ClientAPI = IPlayFabModuleInterface::Get().GetClientAPI();
 
 	// Request
@@ -74,7 +72,9 @@ void UAccountManagerSubsystem::OnLoginSuccess(const PlayFab::ClientModels::FLogi
 	PlayFab::UPlayFabClientAPI::FGetAccountInfoDelegate OnSucces;
 	OnSucces.BindLambda([&UserName = this->PlayfabUsernameCached](const PlayFab::ClientModels::FGetAccountInfoResult& Result)->void
 	{
+		//UE_LOG(LogAccountManager, Log, TEXT("LOGIN SUCCESSFUL! Playerfab id before the change: %s"), *UserName);
 		UserName = Result.AccountInfo->Username;
+		UE_LOG(LogAccountManager, Log, TEXT("LOGIN SUCCESSFUL! Playerfab id: %s"), *UserName);
 	});
 	// OnFailure Delegate
 	PlayFab::FPlayFabErrorDelegate OnFailure;

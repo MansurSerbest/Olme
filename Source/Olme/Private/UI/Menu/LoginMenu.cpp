@@ -19,6 +19,35 @@ void ULoginMenu::NativeConstruct()
 
 	RetryText->SetVisibility(ESlateVisibility::Collapsed);
 	LoginInThrobber->SetVisibility(ESlateVisibility::Hidden);
+
+#if WITH_EDITOR
+	if(GetOwningPlayer()->GetWorld()->WorldType == EWorldType::PIE)
+	{
+		if (GetWorld()->GetNetMode() == NM_Standalone)
+		{
+			int PlayerNr = GPlayInEditorID;
+			FString UserName{};
+			FString Password{TEXT("KoesKoes03")};
+			switch(PlayerNr)
+			{
+			case 0:
+				UserName = TEXT("saricari92");
+				break;
+			case 1:
+				UserName = TEXT("neskek92");
+				break;
+			case 2:
+				UserName = TEXT("manser92");
+				break;
+			}
+			
+			OnLoginFinishedDelegateHandle = UAccountManagerFunctions::GetSubsystem(GetOwningPlayer())->OnLoginPlayfabAccountDelegate.AddUObject(this, &ULoginMenu::OnLoginFinished);
+			UAccountManagerFunctions::LoginPlayfabAccount(GetOwningPlayer(), UserName, Password);
+			LoginInThrobber->SetVisibility(ESlateVisibility::Visible);
+		}
+	}
+#endif
+	
 }
 
 void ULoginMenu::LoginPlayfabAccount()

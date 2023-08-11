@@ -17,6 +17,7 @@ class OLME_API AGameModeLobby : public AGameMode
 
 public:
 	void UpdatePlayerList() const;
+	void StartGame(const FString& level);
 protected:
 	virtual void BeginPlay() override;
 	virtual void OnPostLogin(AController* NewPlayer) override;

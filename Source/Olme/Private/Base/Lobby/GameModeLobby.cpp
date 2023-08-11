@@ -28,6 +28,15 @@ void AGameModeLobby::UpdatePlayerList() const
 	}
 }
 
+void AGameModeLobby::StartGame(const FString& level)
+{
+	if(UWorld* World = GetWorld())
+	{
+		World->ServerTravel(level);
+	}
+	
+}
+
 void AGameModeLobby::BeginPlay()
 {
 	Super::BeginPlay();

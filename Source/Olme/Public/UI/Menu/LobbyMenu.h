@@ -45,6 +45,9 @@ private:
 	UFUNCTION()
 	void QuitLobby();
 
+	UFUNCTION()
+	void StartGame();
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UVerticalBox* PlayerInfoList;
@@ -54,6 +57,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UButton* ChooseLevelButtonRight;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UButton* StartGameButton;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UTextBlock* LevelName;
