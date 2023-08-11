@@ -9,23 +9,6 @@
 void AGameModeLobby::OnPostLogin(AController* NewPlayer)
 {
 	UE_LOG(LogOlme, Log, TEXT("Postlogin! Player: %s"), *NewPlayer->GetName());
-	
-	if(APlayerControllerLobby* PC = Cast<APlayerControllerLobby>(NewPlayer))
-	{
-		LoggedInPlayerControllers.Add(PC);
-		for(APlayerControllerLobby* PlayerController : LoggedInPlayerControllers)
-		{
-			PlayerController->UpdatePlayerList();
-		}
-	}
-}
-
-void AGameModeLobby::UpdatePlayerList() const
-{
-	for(APlayerControllerLobby* PlayerController : LoggedInPlayerControllers)
-	{
-		PlayerController->UpdatePlayerList();
-	}
 }
 
 void AGameModeLobby::StartGame(const FString& level)
@@ -34,7 +17,6 @@ void AGameModeLobby::StartGame(const FString& level)
 	{
 		World->ServerTravel(level);
 	}
-	
 }
 
 void AGameModeLobby::BeginPlay()

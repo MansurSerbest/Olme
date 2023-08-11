@@ -48,13 +48,6 @@ void ULobbyMenu::NativeConstruct()
 	FillChampionsGrid();
 	// Change level logic
 	ChangeLevel(0);
-	// Update Player List
-	if(AGameStateLobby* GameState = Cast<AGameStateLobby>(UGameplayStatics::GetGameState(this)))
-	{
-		TArray<FLobbyPlayerData> PlayerDataArr;
-		GameState->GetLobbyPlayerData(PlayerDataArr);
-		UpdatePlayerList(PlayerDataArr);
-	}
 }
 
 

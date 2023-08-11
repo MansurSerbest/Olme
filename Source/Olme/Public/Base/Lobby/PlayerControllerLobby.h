@@ -15,7 +15,6 @@ class OLME_API APlayerControllerLobby : public APlayerController
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(Client, Reliable)
 	void UpdatePlayerList();
 
 	UFUNCTION(Server, Reliable)

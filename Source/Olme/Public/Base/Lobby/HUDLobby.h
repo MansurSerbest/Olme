@@ -14,6 +14,9 @@ class OLME_API AHUDLobby : public AHUD
 {
 	GENERATED_BODY()
 
+public:
+	void TryCreateLobbyMenu();
+	
 protected:
 	virtual void BeginPlay() override;
 

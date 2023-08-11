@@ -6,7 +6,9 @@
 #include "Base/Lobby/PlayerControllerLobby.h"
 #include "Base/Lobby/PlayerStateLobby.h"
 #include "GameFramework/GameSession.h"
+#include "HelperFunctions/OlmeHelperFunctions.h"
 #include "Kismet/GameplayStatics.h"
+#include "Olme/Olme.h"
 
 void AGameStateLobby::BeginPlay()
 {
@@ -42,6 +44,8 @@ void AGameStateLobby::RemovePlayerState(APlayerState* PlayerState)
 
 void AGameStateLobby::GetLobbyPlayerData(TArray<FLobbyPlayerData>& OutPlayerData)
 {
+	UOlmeHelperFunctions::PrintNetMode(this, TEXT("AGameStateLobby::GetLobbyPlayerData"));
+	
 	TArray<FLobbyPlayerData> PlayerDataArr;
 	PlayerDataArr.Reserve(PlayerArray.Num());
 	
@@ -49,6 +53,7 @@ void AGameStateLobby::GetLobbyPlayerData(TArray<FLobbyPlayerData>& OutPlayerData
 	{
 		if(PlayerArray[i])
 		{
+			UE_LOG(LogOlme, Warning, TEXT("[%s]"), *PlayerArray[i]->GetPlayerNameCustom());
 			FLobbyPlayerData PlayerData;
 			PlayerData.ListIdx = i;
 			PlayerData.DisplayName = FText::FromString(PlayerArray[i]->GetPlayerNameCustom());

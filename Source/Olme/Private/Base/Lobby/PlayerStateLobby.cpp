@@ -39,7 +39,8 @@ void APlayerStateLobby::BeginPlay()
 		Server_SetCustomName(UAccountManagerFunctions::GetPlayfabUsername(this));
 	}
 
-	if(GetNetMode() == NM_ListenServer && HasAuthority())
+	APlayerController* pc = GetPlayerController();
+	if(pc && GetNetMode() == NM_ListenServer && pc->IsLocalController())
 	{
 		Server_SetCustomName(UAccountManagerFunctions::GetPlayfabUsername(this));
 	}
@@ -54,14 +55,6 @@ void APlayerStateLobby::OnRep_NameCustom()
 	}
 
 	UOlmeHelperFunctions::PrintNetMode(this, TEXT("OnRep_NameCustom"));
-}
-
-void APlayerStateLobby::Server_UpdatePlayerList_Implementation()
-{
-	if(AGameModeLobby* GM = Cast<AGameModeLobby>(UGameplayStatics::GetGameMode(this)))
-	{
-		GM->UpdatePlayerList();
-	}
 }
 
 void APlayerStateLobby::Server_SetCustomName_Implementation(const FString& Name)
