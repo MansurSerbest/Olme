@@ -17,7 +17,6 @@ void USessionResultEntry::Init(const FOnlineSessionSearchResult& Result)
 	const int32 CurrentPlayers = Result.Session.SessionSettings.NumPublicConnections - Result.Session.NumOpenPublicConnections;
 	const int32 MaxPlayers = Result.Session.SessionSettings.NumPublicConnections;
 	PlayerNumberText->SetText(FText::Format(FText::FromString("{0}/{1}"), CurrentPlayers, MaxPlayers));
-	
 }
 
 void USessionResultEntry::NativeConstruct()

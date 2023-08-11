@@ -5,6 +5,7 @@
 
 #include "OnlineSessionFunctions.h"
 #include "Base/Lobby/GameStateLobby.h"
+#include "Base/Lobby/PlayerControllerLobby.h"
 #include "Kismet/GameplayStatics.h"
 #include "Structs/OlmeStructs.h"
 #include "UI/Menu/ChampionThumbnailCard.h"
@@ -25,9 +26,9 @@ void ULobbyMenu::UpdatePlayerList(const TArray<FLobbyPlayerData>& PlayerData)
 	for(const FLobbyPlayerData& Data : PlayerData)
 	{
 		ULobbyPlayerEntry* EntryWidget = CreateWidget<ULobbyPlayerEntry>(GetOwningPlayer(), PlayerInfoEntryClass);
-		EntryWidget->Setup(FText::AsNumber(Data.ListIdx), Data.DisplayName);
 		if(IsValid(EntryWidget))
 		{
+			EntryWidget->Setup(FText::AsNumber(Data.ListIdx), Data.DisplayName);
 			PlayerInfoList->AddChildToVerticalBox(EntryWidget);
 		}
 	}
@@ -41,6 +42,7 @@ void ULobbyMenu::NativeConstruct()
 	ChooseLevelButtonLeft->OnPressed.AddDynamic(this, &ULobbyMenu::ChangeLevelLeft);
 	ChooseLevelButtonRight->OnPressed.AddDynamic(this, &ULobbyMenu::ChangeLevelRight);
 	QuitLobbyButton->OnPressed.AddDynamic(this, &ULobbyMenu::QuitLobby);
+	StartGameButton->OnPressed.AddDynamic(this, &ULobbyMenu::StartGame);
 
 	// Fill in champion grid
 	FillChampionsGrid();
@@ -120,4 +122,24 @@ void ULobbyMenu::QuitLobby()
 {
 	UGameplayStatics::OpenLevelBySoftObjectPtr(GetOwningPlayer(), LevelAfterQuitLobby);
 	UOnlineSessionFunctions::DestroySession(GetOwningPlayer());
+}
+
+void ULobbyMenu::StartGame()
+{
+	const UDataTable* Datatable = LevelDatatable.LoadSynchronous();
+	
+	if(IsValid(Datatable))
+	{
+		TArray<FLevelData*> LevelDataArr;
+		Datatable->GetAllRows(FString(TEXT("ULobbyMenu::StartGame()")), LevelDataArr);
+
+		if(LevelDataArr.IsValidIndex(CurrentLevelIdx))
+		{
+			APlayerControllerLobby* pc = Cast<APlayerControllerLobby>(GetOwningPlayer());
+			if(pc)
+			{
+				pc->StartGame(LevelDataArr[CurrentLevelIdx]->FileName.ToString());
+			}
+		}
+	}
 }

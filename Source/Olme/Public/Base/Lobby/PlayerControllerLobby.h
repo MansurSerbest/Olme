@@ -17,6 +17,9 @@ class OLME_API APlayerControllerLobby : public APlayerController
 public:
 	UFUNCTION(Client, Reliable)
 	void UpdatePlayerList();
+
+	UFUNCTION(Server, Reliable)
+	void StartGame(const FString& level);
 protected:
 	virtual void BeginPlay() override;
 };

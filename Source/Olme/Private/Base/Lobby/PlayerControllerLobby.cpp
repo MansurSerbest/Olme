@@ -6,7 +6,6 @@
 #include "UISystemFunctions.h"
 #include "Base/Lobby/GameModeLobby.h"
 #include "Base/Lobby/GameStateLobby.h"
-#include "Base/Lobby/PlayerStateLobby.h"
 #include "Kismet/GameplayStatics.h"
 #include "Structs/OlmeStructs.h"
 #include "UI/Menu/LobbyMenu.h"
@@ -24,7 +23,20 @@ void APlayerControllerLobby::UpdatePlayerList_Implementation()
 	}
 }
 
+void APlayerControllerLobby::StartGame_Implementation(const FString& level)
+{
+	if(AGameModeLobby* gameMode = Cast<AGameModeLobby>(UGameplayStatics::GetGameMode(this)))
+	{
+		gameMode->StartGame(level);
+	}
+}
+
 void APlayerControllerLobby::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if(UGameplayStatics::GetPlatformName() == "Windows")
+	{
+		SetShowMouseCursor(true);
+	}
 }
