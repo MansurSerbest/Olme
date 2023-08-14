@@ -4,9 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameMode.h"
+#include "Structs/OlmeStructs.h"
 #include "GameModeLobby.generated.h"
 
 class APlayerControllerLobby;
+class APlayerStateLobby;
 /**
  * 
  */
@@ -16,13 +18,20 @@ class OLME_API AGameModeLobby : public AGameMode
 	GENERATED_BODY()
 
 public:
-	void UpdatePlayerList() const;
 	void StartGame(const FString& level);
+	void UpdatePlayerList();
 protected:
 	virtual void BeginPlay() override;
 	virtual void OnPostLogin(AController* NewPlayer) override;
 
 private:
+	void GetPlayerData(TArray<FLobbyPlayerData>& data);
+
+private:
 	UPROPERTY()
 	TArray<APlayerControllerLobby*> LoggedInPlayerControllers;
+
+	// Track this too to have an order of the list of states
+	UPROPERTY()
+	TArray<APlayerStateLobby*> LoggedInPlayerStates;
 };

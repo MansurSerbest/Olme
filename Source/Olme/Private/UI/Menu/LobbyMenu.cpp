@@ -28,9 +28,10 @@ void ULobbyMenu::UpdatePlayerList(const TArray<FLobbyPlayerData>& PlayerData)
 		ULobbyPlayerEntry* EntryWidget = CreateWidget<ULobbyPlayerEntry>(GetOwningPlayer(), PlayerInfoEntryClass);
 		if(IsValid(EntryWidget))
 		{
-			EntryWidget->Setup(FText::AsNumber(Data.ListIdx), Data.DisplayName);
+			EntryWidget->Setup( FText::AsNumber(counter), Data.DisplayName);
 			PlayerInfoList->AddChildToVerticalBox(EntryWidget);
 		}
+		++counter;
 	}
 }
 
@@ -48,13 +49,6 @@ void ULobbyMenu::NativeConstruct()
 	FillChampionsGrid();
 	// Change level logic
 	ChangeLevel(0);
-	// Update Player List
-	if(AGameStateLobby* GameState = Cast<AGameStateLobby>(UGameplayStatics::GetGameState(this)))
-	{
-		TArray<FLobbyPlayerData> PlayerDataArr;
-		GameState->GetLobbyPlayerData(PlayerDataArr);
-		UpdatePlayerList(PlayerDataArr);
-	}
 }
 
 

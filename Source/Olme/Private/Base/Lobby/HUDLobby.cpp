@@ -4,13 +4,24 @@
 #include "Base/Lobby/HUDLobby.h"
 
 #include "UISystemFunctions.h"
-#include "Base/Lobby/PlayerControllerLobby.h"
 #include "Blueprint/UserWidget.h"
+#include "UI/Menu/LobbyMenu.h"
+
+void AHUDLobby::TryCreateLobbyMenu()
+{
+	UUserWidget* Widget = Cast<ULobbyMenu>(UUISystemFunctions::GetActiveWidget(this));
+	if(!Widget)
+	{
+		Widget = CreateWidget<UUserWidget>(GetOwningPlayerController(), MainWidgetClass);
+		UUISystemFunctions::PushWidgetFromInstance(this, Widget);
+	}
+}
 
 void AHUDLobby::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UUserWidget* Widget = CreateWidget<UUserWidget>(GetOwningPlayerController(), MainWidgetClass);
-	UUISystemFunctions::PushWidgetFromInstance(this, Widget);
+	TryCreateLobbyMenu();
 }
+
+
