@@ -20,12 +20,17 @@ void APlayerStateLobby::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > &
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(APlayerStateLobby, NameCustom);
+	DOREPLIFETIME(APlayerStateLobby, PlayerData);
 }
 
 FString APlayerStateLobby::GetPlayerNameCustom() const
 {
-	return NameCustom;
+	return PlayerData.DisplayName.ToString();
+}
+
+void APlayerStateLobby::GetPlayerData(FLobbyPlayerData& Data)
+{
+	Data = PlayerData;
 }
 
 void APlayerStateLobby::BeginPlay()
@@ -33,33 +38,32 @@ void APlayerStateLobby::BeginPlay()
 	Super::BeginPlay();
 
 	UOlmeHelperFunctions::PrintNetMode(this, TEXT("APlayerStateLobby::BeginPlay()"));
+
+	PlayerData.DisplayName = FText::FromString(UAccountManagerFunctions::GetPlayfabUsername(this));
+	APlayerControllerLobby* pc = Cast<APlayerControllerLobby>(UGameplayStatics::GetPlayerController(this, 0));
 	
-	if(GetNetMode() == NM_Client)
+	// The client which connected to the (listen)-server
+	if(pc && GetNetMode() == NM_Client && pc->IsLocalController())
 	{
-		Server_SetCustomName(UAccountManagerFunctions::GetPlayfabUsername(this));
+		Server_SetCustomName(PlayerData.DisplayName);
 	}
-
-	APlayerController* pc = GetPlayerController();
-	if(pc && GetNetMode() == NM_ListenServer && pc->IsLocalController())
+	// The lobby host
+	else if(pc && GetNetMode() == NM_ListenServer && pc->IsLocalController())
 	{
-		Server_SetCustomName(UAccountManagerFunctions::GetPlayfabUsername(this));
+		if(AGameModeLobby* GM = Cast<AGameModeLobby>(UGameplayStatics::GetGameMode(this)))
+		{
+			GM->UpdatePlayerList();
+		}
 	}
 }
 
-void APlayerStateLobby::OnRep_NameCustom()
+void APlayerStateLobby::Server_SetCustomName_Implementation(const FText& Name)
 {
-	// Get the playercontroller owned by this machine
-	if(APlayerControllerLobby* pc = Cast<APlayerControllerLobby>(UGameplayStatics::GetPlayerController(this, 0))) 
-	{
-		pc->UpdatePlayerList();
-	}
-
-	UOlmeHelperFunctions::PrintNetMode(this, TEXT("OnRep_NameCustom"));
-}
-
-void APlayerStateLobby::Server_SetCustomName_Implementation(const FString& Name)
-{
-	NameCustom = Name;
 	UOlmeHelperFunctions::PrintNetMode(this, TEXT("APlayerStateLobby::Server_SetCustomName"));
-	OnRep_NameCustom();
+	PlayerData.DisplayName = Name;
+
+	if(AGameModeLobby* GM = Cast<AGameModeLobby>(UGameplayStatics::GetGameMode(this)))
+	{
+		GM->UpdatePlayerList();
+	}
 }

@@ -38,8 +38,8 @@ struct FLobbyPlayerData
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 ListIdx;
+	FText DisplayName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FText DisplayName;
+	bool bIsReady{false};
 };

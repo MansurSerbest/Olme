@@ -15,10 +15,11 @@ class OLME_API APlayerControllerLobby : public APlayerController
 	GENERATED_BODY()
 
 public:
-	void UpdatePlayerList();
+	UFUNCTION(Client, Reliable)
+	void UpdatePlayerList(const TArray<FLobbyPlayerData>& data);
 
 	UFUNCTION(Server, Reliable)
-	void StartGame(const FString& level);
+	void StartGame(const FString& Level);
 protected:
 	virtual void BeginPlay() override;
 };

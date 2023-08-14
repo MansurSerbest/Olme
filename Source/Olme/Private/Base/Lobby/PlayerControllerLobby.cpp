@@ -7,12 +7,16 @@
 #include "Base/Lobby/GameModeLobby.h"
 #include "Base/Lobby/GameStateLobby.h"
 #include "Base/Lobby/HUDLobby.h"
+#include "Base/Lobby/PlayerStateLobby.h"
+#include "HelperFunctions/OlmeHelperFunctions.h"
 #include "Kismet/GameplayStatics.h"
 #include "Structs/OlmeStructs.h"
 #include "UI/Menu/LobbyMenu.h"
 
-void APlayerControllerLobby::UpdatePlayerList()
+void APlayerControllerLobby::UpdatePlayerList_Implementation(const TArray<FLobbyPlayerData>& data)
 {
+	UOlmeHelperFunctions::PrintNetMode(this, TEXT("APlayerControllerLobby::UpdatePlayerList_Implementation"));
+	
 	// If, for some reason, the widget is not ready yet, create it here already before the HUD instance does
 	if(AHUDLobby* HudLobby = Cast<AHUDLobby>(GetHUD()))
 	{
@@ -22,26 +26,23 @@ void APlayerControllerLobby::UpdatePlayerList()
 	// Update the player list
 	if(ULobbyMenu* LobbyMenu = Cast<ULobbyMenu>(UUISystemFunctions::GetActiveWidget(this)))
 	{
-		if(AGameStateLobby* GameState = Cast<AGameStateLobby>(UGameplayStatics::GetGameState(this)))
-		{
-			TArray<FLobbyPlayerData> PlayerDataArr;
-			GameState->GetLobbyPlayerData(PlayerDataArr);
-			LobbyMenu->UpdatePlayerList(PlayerDataArr);
-		}
+		LobbyMenu->UpdatePlayerList(data);
 	}
 }
 
-void APlayerControllerLobby::StartGame_Implementation(const FString& level)
+void APlayerControllerLobby::StartGame_Implementation(const FString& Level)
 {
 	if(AGameModeLobby* gameMode = Cast<AGameModeLobby>(UGameplayStatics::GetGameMode(this)))
 	{
-		gameMode->StartGame(level);
+		gameMode->StartGame(Level);
 	}
 }
 
 void APlayerControllerLobby::BeginPlay()
 {
 	Super::BeginPlay();
+
+	UOlmeHelperFunctions::PrintNetMode(this, TEXT("APlayerControllerLobby::BeginPlay()"));
 
 	if(UGameplayStatics::GetPlatformName() == "Windows")
 	{

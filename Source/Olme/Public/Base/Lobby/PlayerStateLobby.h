@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerState.h"
+#include "Structs/OlmeStructs.h"
 #include "PlayerStateLobby.generated.h"
+
+struct FLobbyPlayerData;
 
 /**
  * 
@@ -19,17 +22,16 @@ public:
 	
 	virtual FString GetPlayerNameCustom() const override;
 
+	void GetPlayerData(FLobbyPlayerData& Data);
+
 protected:
 	virtual void BeginPlay() override;
 
 private:
-	UFUNCTION()
-	void OnRep_NameCustom();
-
 	UFUNCTION(Server, Reliable)
-	void Server_SetCustomName(const FString& Name);
+	void Server_SetCustomName(const FText& Name);
 	
 private:
-	UPROPERTY(ReplicatedUsing = OnRep_NameCustom)
-	FString NameCustom;
+	UPROPERTY(Replicated)
+	FLobbyPlayerData PlayerData;
 };
