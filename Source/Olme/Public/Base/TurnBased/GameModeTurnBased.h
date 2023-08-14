@@ -6,6 +6,8 @@
 #include "GameFramework/GameMode.h"
 #include "GameModeTurnBased.generated.h"
 
+class UGameTypeBase;
+
 /**
  * 
  */
@@ -13,5 +15,8 @@ UCLASS()
 class OLME_API AGameModeTurnBased : public AGameMode
 {
 	GENERATED_BODY()
-	
+
+private:
+	UPROPERTY()
+	UGameTypeBase* GameType;
 };
