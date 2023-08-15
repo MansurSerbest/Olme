@@ -29,6 +29,8 @@ public:
 	void UpdatePlayerList(const TArray<FLobbyPlayerData>& PlayerData);
 
 	void Init(const bool isHost);
+
+	void UpdateLevelInfo(const int idx);
 	
 protected:
 	virtual void NativeConstruct() override;
