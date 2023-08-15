@@ -7,7 +7,6 @@
 #include "Blueprint/UserWidget.h"
 #include "UI/Menu/LobbyMenu.h"
 
-PRAGMA_DISABLE_OPTIMIZATION
 void AHUDLobby::TryCreateLobbyMenu()
 {
 	ULobbyMenu* Widget = Cast<ULobbyMenu>(UUISystemFunctions::GetActiveWidget(this));
@@ -17,12 +16,12 @@ void AHUDLobby::TryCreateLobbyMenu()
 		UUISystemFunctions::PushWidgetFromInstance(this, Widget);
 		if(Widget)
 		{
-			bool bIsHost = GetNetMode() == (NM_ListenServer);
+			const bool bIsHost = GetNetMode() == (NM_ListenServer);
 			Widget->Init(bIsHost);
 		}
 	}
 }
-PRAGMA_ENABLE_OPTIMIZATION
+
 void AHUDLobby::BeginPlay()
 {
 	Super::BeginPlay();
