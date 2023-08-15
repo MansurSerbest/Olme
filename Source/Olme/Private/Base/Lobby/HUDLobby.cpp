@@ -7,16 +7,22 @@
 #include "Blueprint/UserWidget.h"
 #include "UI/Menu/LobbyMenu.h"
 
+PRAGMA_DISABLE_OPTIMIZATION
 void AHUDLobby::TryCreateLobbyMenu()
 {
-	UUserWidget* Widget = Cast<ULobbyMenu>(UUISystemFunctions::GetActiveWidget(this));
+	ULobbyMenu* Widget = Cast<ULobbyMenu>(UUISystemFunctions::GetActiveWidget(this));
 	if(!Widget)
 	{
-		Widget = CreateWidget<UUserWidget>(GetOwningPlayerController(), MainWidgetClass);
+		Widget = CreateWidget<ULobbyMenu>(GetOwningPlayerController(), MainWidgetClass);
 		UUISystemFunctions::PushWidgetFromInstance(this, Widget);
+		if(Widget)
+		{
+			bool bIsHost = GetNetMode() == (NM_ListenServer);
+			Widget->Init(bIsHost);
+		}
 	}
 }
-
+PRAGMA_ENABLE_OPTIMIZATION
 void AHUDLobby::BeginPlay()
 {
 	Super::BeginPlay();

@@ -35,6 +35,17 @@ void ULobbyMenu::UpdatePlayerList(const TArray<FLobbyPlayerData>& PlayerData)
 	}
 }
 
+void ULobbyMenu::Init(const bool isHost)
+{
+	bIsHost = isHost;
+	if(!bIsHost)
+	{
+		ChooseLevelButtonLeft->SetVisibility(ESlateVisibility::Collapsed);
+		ChooseLevelButtonRight->SetVisibility(ESlateVisibility::Collapsed);
+		StartGameButton->SetVisibility(ESlateVisibility::Collapsed);
+	}
+}
+
 void ULobbyMenu::NativeConstruct()
 {
 	Super::NativeConstruct();
