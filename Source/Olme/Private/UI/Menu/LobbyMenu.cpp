@@ -35,6 +35,36 @@ void ULobbyMenu::UpdatePlayerList(const TArray<FLobbyPlayerData>& PlayerData)
 	}
 }
 
+void ULobbyMenu::Init(const bool isHost)
+{
+	bIsHost = isHost;
+	if(!bIsHost)
+	{
+		ChooseLevelButtonLeft->SetVisibility(ESlateVisibility::Collapsed);
+		ChooseLevelButtonRight->SetVisibility(ESlateVisibility::Collapsed);
+		StartGameButton->SetVisibility(ESlateVisibility::Collapsed);
+	}
+}
+
+void ULobbyMenu::UpdateLevelInfo(const int idx)
+{
+	CurrentLevelIdx = idx;
+	
+	const UDataTable* Datatable = LevelDatatable.LoadSynchronous();
+	
+	if(IsValid(Datatable))
+	{
+		TArray<FLevelData*> LevelDataArr;
+		Datatable->GetAllRows(FString(TEXT("ULobbyMenu::ChangeLevel(int32 direction)")), LevelDataArr);
+		
+		if(LevelDataArr.IsValidIndex(idx))
+		{
+			LevelName->SetText(LevelDataArr[idx]->DisplayName);
+			LevelThumbnail->SetBrushFromTexture(LevelDataArr[idx]->Thumbnail);
+		}
+	}
+}
+
 void ULobbyMenu::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -87,28 +117,32 @@ void ULobbyMenu::ChangeLevelRight()
 void ULobbyMenu::ChangeLevel(int32 direction)
 {
 	const UDataTable* Datatable = LevelDatatable.LoadSynchronous();
+	int newIdx = CurrentLevelIdx;
 	
 	if(IsValid(Datatable))
 	{
-		TArray<FLevelData*> LevelDataArr;
-		Datatable->GetAllRows(FString(TEXT("ULobbyMenu::ChangeLevel(int32 direction)")), LevelDataArr);
-
 		// Make sure the level selection loops over the options
-		CurrentLevelIdx += direction;
-		if(CurrentLevelIdx < 0)
+		const int32 numOfRows = Datatable->GetRowNames().Num();
+		newIdx += direction;
+
+		if(newIdx < 0)
 		{
-			CurrentLevelIdx = LevelDataArr.Num() -1;
+			newIdx = numOfRows -1;
 		}
-		else if(CurrentLevelIdx > LevelDataArr.Num() - 1)
+		else if(newIdx > numOfRows - 1)
 		{
-			CurrentLevelIdx = 0;
+			newIdx = 0;
 		}
-		
-		if(LevelDataArr.IsValidIndex(CurrentLevelIdx))
-		{
-			LevelName->SetText(LevelDataArr[CurrentLevelIdx]->DisplayName);
-			LevelThumbnail->SetBrushFromTexture(LevelDataArr[CurrentLevelIdx]->Thumbnail);
-		}
+
+		// Update the visual level info
+        UpdateLevelInfo(newIdx);
+
+		// Update the currentlevelidx vale in gamestate. This will also trigger changes in the UI of the other players
+        AGameStateLobby* GameStateLobby = Cast<AGameStateLobby>(UGameplayStatics::GetGameState(GetOwningPlayer()));
+        if(GameStateLobby)
+        {
+        	GameStateLobby->Server_SetCurrentLevelIdx(newIdx);
+        }
 	}
 }
 

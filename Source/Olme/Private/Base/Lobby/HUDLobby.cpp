@@ -9,11 +9,16 @@
 
 void AHUDLobby::TryCreateLobbyMenu()
 {
-	UUserWidget* Widget = Cast<ULobbyMenu>(UUISystemFunctions::GetActiveWidget(this));
+	ULobbyMenu* Widget = Cast<ULobbyMenu>(UUISystemFunctions::GetActiveWidget(this));
 	if(!Widget)
 	{
-		Widget = CreateWidget<UUserWidget>(GetOwningPlayerController(), MainWidgetClass);
+		Widget = CreateWidget<ULobbyMenu>(GetOwningPlayerController(), MainWidgetClass);
 		UUISystemFunctions::PushWidgetFromInstance(this, Widget);
+		if(Widget)
+		{
+			const bool bIsHost = GetNetMode() == (NM_ListenServer);
+			Widget->Init(bIsHost);
+		}
 	}
 }
 
