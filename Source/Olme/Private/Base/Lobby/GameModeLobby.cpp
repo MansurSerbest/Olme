@@ -4,6 +4,8 @@
 #include "Base/Lobby/GameModeLobby.h"
 
 #include "AccountManagerFunctions.h"
+#include "OnlineSessionFunctions.h"
+#include "SessionSubsystem.h"
 #include "Base/Lobby/PlayerControllerLobby.h"
 #include "Base/Lobby/PlayerStateLobby.h"
 #include "Olme/Olme.h"
@@ -37,6 +39,7 @@ void AGameModeLobby::StartGame(const FString& level)
 {
 	if(UWorld* World = GetWorld())
 	{
+		UOnlineSessionFunctions::DestroySession(this);
 		World->ServerTravel(level);
 	}
 }

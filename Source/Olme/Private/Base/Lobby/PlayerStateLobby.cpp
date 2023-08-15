@@ -6,6 +6,7 @@
 #include "AccountManagerFunctions.h"
 #include "Base/Lobby/GameModeLobby.h"
 #include "Base/Lobby/PlayerControllerLobby.h"
+#include "GameFramework/GameState.h"
 #include "HelperFunctions/OlmeHelperFunctions.h"
 #include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
@@ -37,6 +38,15 @@ void APlayerStateLobby::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// Don't trigger the logic below if the match has ended. This beginplay can be triggered when destroying a playerstate and creating a new one to put it in the inactive
+	// playerstate array
+	const AGameState* GameState = Cast<AGameState>( UGameplayStatics::GetGameState(this));
+	const FName MatchState = GameState->GetMatchState();
+	if(GameState && GameState->HasMatchEnded())
+	{
+		return;
+	}
+	
 	UOlmeHelperFunctions::PrintNetMode(this, TEXT("APlayerStateLobby::BeginPlay()"));
 
 	PlayerData.DisplayName = FText::FromString(UAccountManagerFunctions::GetPlayfabUsername(this));
