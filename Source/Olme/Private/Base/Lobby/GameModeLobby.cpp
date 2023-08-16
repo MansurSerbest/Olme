@@ -82,27 +82,4 @@ void AGameModeLobby::Logout(AController* Exiting)
 void AGameModeLobby::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// // Remove the cached playercontroller/playerstate if they logout
-	// FGameModeEvents::GameModeLogoutEvent.AddLambda([this](AGameModeBase* GameMode, AController* PlayerController)->void
-	// {
-	// 	// Execute logic only when logout happens during lobby time
-	// 	if(!HasMatchEnded())
-	// 	{
-	// 		for(int i = 0; i < LoggedInPlayerControllers.Num(); ++i)
-	// 		{
-	// 			if(PlayerController == LoggedInPlayerControllers[i])
-	// 			{
-	// 				LoggedInPlayerControllers.RemoveAt(i);
-	// 				LoggedInPlayerStates.RemoveAt(i);
-	// 				break;
-	// 			}
-	// 		}
-	//
-	// 		if(!PlayerController->IsLocalController())
-	// 		{
-	// 			UpdatePlayerList();
-	// 		}
-	// 	}
-	// });
 }
