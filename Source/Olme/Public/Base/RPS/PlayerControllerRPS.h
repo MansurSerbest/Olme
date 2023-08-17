@@ -13,5 +13,6 @@ UCLASS()
 class OLME_API APlayerControllerRPS : public APlayerControllerTurnBased
 {
 	GENERATED_BODY()
-	
+
+	APlayerControllerRPS();
 };
