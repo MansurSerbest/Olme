@@ -40,3 +40,19 @@ void UOlmeHelperFunctions::PrintNetMode(const UObject* WorldContextObject, const
 		break;
 	}
 }
+
+int32 UOlmeHelperFunctions::ShiftInRotation(const int Size, const int Direction, int Idx)
+{
+	Idx += Direction;
+
+	if(Idx < 0)
+	{
+		Idx = Size -1;
+	}
+	else if(Idx > Size - 1)
+	{
+		Idx = 0;
+	}
+
+	return Idx;
+}

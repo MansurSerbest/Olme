@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameState.h"
+#include "Structs/OlmeStructs.h"
 #include "GameStateLobby.generated.h"
 
 /**
@@ -16,12 +17,36 @@ class OLME_API AGameStateLobby : public AGameState
 
 public:
 	UFUNCTION()
-	void OnRep_CurrentLevelIdx();
+	void OnRep_CurrentLevel();
 
 	UFUNCTION(Server, Reliable)
-	void Server_SetCurrentLevelIdx(const int32 idx);
+	void Server_SetCurrentLevel(const FPairIntName& Pair);
+
+protected:
+	virtual void BeginPlay() override;
+
+public:
+	UFUNCTION()
+	void OnRep_GameType();
+
+	UFUNCTION(Server, Reliable)
+	void Server_SetCurrentGameType(const FPairIntName& Pair);
+
+	FPairIntName GetCurrentLevel() const;
+
+	FPairIntName GetCurrentGameType() const;
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSoftObjectPtr<UDataTable> DataTableGameType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSoftObjectPtr<UDataTable> DataTableLevel;
 	
 private:
-	UPROPERTY(ReplicatedUsing = OnRep_CurrentLevelIdx)
-	int32 CurrentLevelIdx;
+	UPROPERTY(ReplicatedUsing = OnRep_CurrentLevel)
+	FPairIntName CurrentLevel;
+
+	UPROPERTY(ReplicatedUsing = OnRep_GameType)
+	FPairIntName CurrentGameType;
 };
