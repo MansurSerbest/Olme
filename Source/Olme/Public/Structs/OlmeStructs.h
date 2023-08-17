@@ -43,3 +43,18 @@ struct FLobbyPlayerData
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsReady{false};
 };
+
+USTRUCT(BlueprintType)
+struct FLobbyGameTypeData : public FTableRowBase
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 MinNrOfPlayers;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 MaxNrOfPlayers;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FName> Maps;
+};
