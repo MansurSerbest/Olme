@@ -36,8 +36,6 @@ protected:
 	virtual void NativeConstruct() override;
 
 private:
-	void FillChampionsGrid();
-
 	UFUNCTION()
 	void ChangeLevelLeft();
 
@@ -72,29 +70,17 @@ protected:
 	UImage* LevelThumbnail;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	UGridPanel* ChampionGridPanel;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UButton* QuitLobbyButton;
 
 	UPROPERTY(EditAnywhere, Category = LobbyDefaults)
 	TSubclassOf<ULobbyPlayerEntry> PlayerInfoEntryClass;
 
 	UPROPERTY(EditAnywhere, Category = LobbyDefaults)
-	TSubclassOf<UChampionThumbnailCard> ChampionCardClass;
-
-	UPROPERTY(EditAnywhere, Category = LobbyDefaults)
 	TSoftObjectPtr<UDataTable> LevelDatatable;
-
-	UPROPERTY(EditAnywhere, Category = LobbyDefaults)
-	TSoftObjectPtr<UDataTable> ChampionsDatatable;
 
 	// Level that should open after quitting the lobby
 	UPROPERTY(EditAnywhere, Category = LobbyDefaults)
 	TSoftObjectPtr<UWorld> LevelAfterQuitLobby;
-
-	UPROPERTY(EditAnywhere, Category = LobbyDefaults)
-	int32 NrOfColumsChampionsGrid;
 
 private:
 	int32 CurrentLevelIdx;
