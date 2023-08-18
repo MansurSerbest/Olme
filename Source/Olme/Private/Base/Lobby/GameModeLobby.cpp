@@ -48,10 +48,11 @@ void AGameModeLobby::UpdatePlayerList()
 {
 	TArray<FLobbyPlayerData> Data;
 	GetPlayerData(Data);
-	
+
+	const int CurrentNrOfPlayers = LoggedInPlayerControllers.Num();
 	for(APlayerControllerLobby* it : LoggedInPlayerControllers)
 	{
-		it->UpdatePlayerList(Data);
+		it->UpdatePlayerList(Data, CurrentNrOfPlayers);
 	}
 }
 

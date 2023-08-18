@@ -23,13 +23,15 @@ class OLME_API ULobbyMenu : public UUserWidget
 public:
 	ULobbyMenu(const FObjectInitializer& ObjectInitializer);
 
-	void UpdatePlayerList(const TArray<FLobbyPlayerData>& PlayerData);
+	void UpdatePlayerList(const TArray<FLobbyPlayerData>& PlayerData, const int32 CurrNrOfPlayers);
 
 	void Init(const bool isHost);
 
 	void UpdateLevelInfo(const FPairIntName& Pair);
 
 	void UpdateGameTypeInfo(const FPairIntName& Pair);
+
+	void UpdatePlayerNumberInfo(const int32 CurrNumberOfPlayers, const int32 MaxNumberOfPlayers);
 	
 protected:
 	virtual void NativeConstruct() override;
@@ -46,10 +48,6 @@ private:
 
 	UFUNCTION()
 	void ChangeGameTypeRight();
-
-	void ChangeGameType(int32 direction);
-
-	void ChangeLevel(int32 direction);
 
 	UFUNCTION()
 	void QuitLobby();

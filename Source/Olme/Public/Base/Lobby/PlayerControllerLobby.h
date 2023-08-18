@@ -16,7 +16,7 @@ class OLME_API APlayerControllerLobby : public APlayerController
 
 public:
 	UFUNCTION(Client, Reliable)
-	void UpdatePlayerList(const TArray<FLobbyPlayerData>& data);
+	void UpdatePlayerList(const TArray<FLobbyPlayerData>& data, const int32 CurrNrOfPlayers);
 
 	UFUNCTION(Server, Reliable)
 	void StartGame(const FString& Level);
