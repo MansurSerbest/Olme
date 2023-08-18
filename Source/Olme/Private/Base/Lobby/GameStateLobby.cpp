@@ -165,3 +165,13 @@ int32 AGameStateLobby::GetMaxNumberOfPlayers() const
 {
 	return MaxNumberOfPlayers;
 }
+
+int32 AGameStateLobby::GetMinNumberOfPlayers() const
+{
+	return MinNumberOfPlayers;
+}
+
+int32 AGameStateLobby::GetCurrentNumberOfPlayers() const
+{
+	return PlayerArray.Num();
+}

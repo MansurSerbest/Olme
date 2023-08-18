@@ -6,7 +6,6 @@
 #include "OnlineSessionFunctions.h"
 #include "Base/Lobby/GameStateLobby.h"
 #include "Base/Lobby/PlayerControllerLobby.h"
-#include "HelperFunctions/OlmeHelperFunctions.h"
 #include "Kismet/GameplayStatics.h"
 #include "Structs/OlmeStructs.h"
 #include "Components/TextBlock.h"
@@ -76,12 +75,24 @@ void ULobbyMenu::UpdateGameTypeInfo(const FPairIntName& Pair)
 			GameTypeName->SetText(row->DisplayName);
 		}
 	}
+
+	// // Disable Start Game Button if current player number is less than the minimum
+	// if(AGameStateLobby* gs = AGameStateLobby::GetInstance(GetOwningPlayer()))
+	// {
+	// 	gs->PlayerArray.Num() >= gs->GetMinNumberOfPlayers()? StartGameButton->SetIsEnabled(true) : StartGameButton->SetIsEnabled(false);
+	// }
 }
 
 void ULobbyMenu::UpdatePlayerNumberInfo(const int32 CurrNumberOfPlayers, const int32 MaxNumberOfPlayers)
 {
 	const FText newFormat = FText::Format(FText::FromString(TEXT("{0}/{1}")), FText::AsNumber(CurrNumberOfPlayers), FText::AsNumber(MaxNumberOfPlayers));
 	NrOfPlayersText->SetText(newFormat);
+
+	// Disable Start Game Button if current player number is less than the minimum
+	if(AGameStateLobby* gs = AGameStateLobby::GetInstance(GetOwningPlayer()))
+	{
+		CurrNumberOfPlayers >= gs->GetMinNumberOfPlayers()? StartGameButton->SetIsEnabled(true) : StartGameButton->SetIsEnabled(false);
+	}
 }
 
 void ULobbyMenu::NativeConstruct()
@@ -97,10 +108,6 @@ void ULobbyMenu::NativeConstruct()
 	
 	QuitLobbyButton->OnPressed.AddDynamic(this, &ULobbyMenu::QuitLobby);
 	StartGameButton->OnPressed.AddDynamic(this, &ULobbyMenu::StartGame);
-	
-	// Change level logic
-	// ChangeGameType(0);
-	// ChangeLevel(0);
 }
 
 void ULobbyMenu::ChangeLevelLeft()
@@ -124,10 +131,10 @@ void ULobbyMenu::ChangeLevelRight()
 void ULobbyMenu::ChangeGameTypeLeft()
 {
 	// Update the CurrentGameTypeIdx value in gamestate. This will also trigger changes in the UI of the other players
-	AGameStateLobby* GameStateLobby = Cast<AGameStateLobby>(UGameplayStatics::GetGameState(GetOwningPlayer()));
-	if(GameStateLobby)
+	AGameStateLobby* gs = Cast<AGameStateLobby>(UGameplayStatics::GetGameState(GetOwningPlayer()));
+	if(gs)
 	{
-		GameStateLobby->Server_ChangeGameType(-1);
+		gs->Server_ChangeGameType(-1);
 	}
 }
 

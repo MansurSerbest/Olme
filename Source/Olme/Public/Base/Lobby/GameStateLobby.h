@@ -45,6 +45,10 @@ public:
 
 	int32 GetMaxNumberOfPlayers() const;
 
+	int32 GetMinNumberOfPlayers() const;
+
+	int32 GetCurrentNumberOfPlayers() const;
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<UDataTable> DataTableGameType;
