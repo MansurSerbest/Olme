@@ -150,8 +150,11 @@ void ULobbyMenu::ChangeGameTypeRight()
 
 void ULobbyMenu::QuitLobby()
 {
-	UGameplayStatics::OpenLevelBySoftObjectPtr(GetOwningPlayer(), LevelAfterQuitLobby);
-	UOnlineSessionFunctions::DestroySession(GetOwningPlayer());
+	APlayerControllerLobby* PC = Cast<APlayerControllerLobby>(GetOwningPlayer());
+	if(PC)
+	{
+		PC->LeaveLobby();
+	}
 }
 
 void ULobbyMenu::StartGame()

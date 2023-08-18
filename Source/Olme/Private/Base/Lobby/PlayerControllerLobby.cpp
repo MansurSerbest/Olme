@@ -3,6 +3,7 @@
 
 #include "Base/Lobby/PlayerControllerLobby.h"
 
+#include "OnlineSessionFunctions.h"
 #include "UISystemFunctions.h"
 #include "Base/Lobby/GameModeLobby.h"
 #include "Base/Lobby/GameStateLobby.h"
@@ -36,6 +37,12 @@ void APlayerControllerLobby::StartGame_Implementation(const FString& Level)
 	{
 		gameMode->StartGame(Level);
 	}
+}
+
+void APlayerControllerLobby::LeaveLobby_Implementation()
+{
+	UGameplayStatics::OpenLevelBySoftObjectPtr(this, LevelAfterQuitLobby);
+	UOnlineSessionFunctions::DestroySession(this);
 }
 
 void APlayerControllerLobby::BeginPlay()

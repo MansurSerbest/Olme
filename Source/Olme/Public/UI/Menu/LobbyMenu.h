@@ -105,10 +105,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UButton* QuitLobbyButton;
-	
-	// Level that should open after quitting the lobby
-	UPROPERTY(EditAnywhere, Category = LobbyDefaults)
-	TSoftObjectPtr<UWorld> LevelAfterQuitLobby;
 
 private:
 	bool bIsHost{false};
