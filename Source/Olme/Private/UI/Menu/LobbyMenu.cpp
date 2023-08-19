@@ -6,7 +6,6 @@
 #include "OnlineSessionFunctions.h"
 #include "Base/Lobby/GameStateLobby.h"
 #include "Base/Lobby/PlayerControllerLobby.h"
-#include "HelperFunctions/OlmeHelperFunctions.h"
 #include "Kismet/GameplayStatics.h"
 #include "Structs/OlmeStructs.h"
 #include "Components/TextBlock.h"
@@ -16,7 +15,7 @@ ULobbyMenu::ULobbyMenu(const FObjectInitializer& ObjectInitializer)
 {
 }
 
-void ULobbyMenu::UpdatePlayerList(const TArray<FLobbyPlayerData>& PlayerData)
+void ULobbyMenu::UpdatePlayerList(const TArray<FLobbyPlayerData>& PlayerData, const int32 CurrNrOfPlayers)
 {
 	// Clear the list before adding new players
 	PlayerInfoList->ClearChildren();
@@ -32,6 +31,12 @@ void ULobbyMenu::UpdatePlayerList(const TArray<FLobbyPlayerData>& PlayerData)
 		}
 		++counter;
 	}
+
+	// Update the number of players data
+	if(AGameStateLobby* gs = AGameStateLobby::GetInstance(GetOwningPlayer()))
+	{
+		UpdatePlayerNumberInfo(CurrNrOfPlayers, gs->GetMaxNumberOfPlayers());
+	}
 }
 
 void ULobbyMenu::Init(const bool isHost)
@@ -41,6 +46,8 @@ void ULobbyMenu::Init(const bool isHost)
 	{
 		ChooseLevelButtonLeft->SetVisibility(ESlateVisibility::Collapsed);
 		ChooseLevelButtonRight->SetVisibility(ESlateVisibility::Collapsed);
+		ChooseGameTypeButtonLeft->SetVisibility(ESlateVisibility::Collapsed);
+		ChooseGameTypeButtonRight->SetVisibility(ESlateVisibility::Collapsed);
 		StartGameButton->SetVisibility(ESlateVisibility::Collapsed);
 	}
 }
@@ -68,6 +75,24 @@ void ULobbyMenu::UpdateGameTypeInfo(const FPairIntName& Pair)
 			GameTypeName->SetText(row->DisplayName);
 		}
 	}
+
+	// // Disable Start Game Button if current player number is less than the minimum
+	// if(AGameStateLobby* gs = AGameStateLobby::GetInstance(GetOwningPlayer()))
+	// {
+	// 	gs->PlayerArray.Num() >= gs->GetMinNumberOfPlayers()? StartGameButton->SetIsEnabled(true) : StartGameButton->SetIsEnabled(false);
+	// }
+}
+
+void ULobbyMenu::UpdatePlayerNumberInfo(const int32 CurrNumberOfPlayers, const int32 MaxNumberOfPlayers)
+{
+	const FText newFormat = FText::Format(FText::FromString(TEXT("{0}/{1}")), FText::AsNumber(CurrNumberOfPlayers), FText::AsNumber(MaxNumberOfPlayers));
+	NrOfPlayersText->SetText(newFormat);
+
+	// Disable Start Game Button if current player number is less than the minimum
+	if(AGameStateLobby* gs = AGameStateLobby::GetInstance(GetOwningPlayer()))
+	{
+		CurrNumberOfPlayers >= gs->GetMinNumberOfPlayers()? StartGameButton->SetIsEnabled(true) : StartGameButton->SetIsEnabled(false);
+	}
 }
 
 void ULobbyMenu::NativeConstruct()
@@ -83,95 +108,53 @@ void ULobbyMenu::NativeConstruct()
 	
 	QuitLobbyButton->OnPressed.AddDynamic(this, &ULobbyMenu::QuitLobby);
 	StartGameButton->OnPressed.AddDynamic(this, &ULobbyMenu::StartGame);
-	
-	// Change level logic
-	ChangeGameType(0);
-	ChangeLevel(0);
 }
 
 void ULobbyMenu::ChangeLevelLeft()
 {
-	ChangeLevel(-1);
+	// Update the currentlevel value in gamestate. This will also trigger changes in the UI of the other players
+	if(AGameStateLobby* GameStateLobby = AGameStateLobby::GetInstance(GetOwningPlayer()))
+	{
+		GameStateLobby->Server_ChangeLevel(-1);
+	}
 }
 
 void ULobbyMenu::ChangeLevelRight()
 {
-	ChangeLevel(1);
+	// Update the currentlevel value in gamestate. This will also trigger changes in the UI of the other players
+	if(AGameStateLobby* GameStateLobby = AGameStateLobby::GetInstance(GetOwningPlayer()))
+	{
+		GameStateLobby->Server_ChangeLevel(1);
+	}
 }
 
 void ULobbyMenu::ChangeGameTypeLeft()
 {
-	ChangeGameType(-1);
+	// Update the CurrentGameTypeIdx value in gamestate. This will also trigger changes in the UI of the other players
+	AGameStateLobby* gs = Cast<AGameStateLobby>(UGameplayStatics::GetGameState(GetOwningPlayer()));
+	if(gs)
+	{
+		gs->Server_ChangeGameType(-1);
+	}
 }
 
 void ULobbyMenu::ChangeGameTypeRight()
 {
-	ChangeGameType(1);
-}
-
-void ULobbyMenu::ChangeGameType(int32 direction)
-{
-	UDataTable* dataTable = GameTypeDatatable.LoadSynchronous();
-	
-	if(IsValid(dataTable))
+	// Update the CurrentGameTypeIdx value in gamestate. This will also trigger changes in the UI of the other players
+	AGameStateLobby* GameStateLobby = Cast<AGameStateLobby>(UGameplayStatics::GetGameState(GetOwningPlayer()));
+	if(GameStateLobby)
 	{
-		// Update new GameType info
-		const int32 newIdx = UOlmeHelperFunctions::ShiftInRotation(dataTable->GetRowNames().Num(), direction, GetCurrentGameType().First);
-		const FName newName = dataTable->GetRowNames()[newIdx];
-		const FPairIntName resultGameType = {newIdx, newName};
-		UpdateGameTypeInfo(resultGameType);
-
-		// Update new Level info: Reset level idx to zero, because every gametype will show its own list of available levels
-		FLobbyGameTypeData* row = dataTable->FindRow<FLobbyGameTypeData>(newName, TEXT("ULobbyMenu::ChangeGameType"));
-		FPairIntName resultLevel = {0, TEXT("")};
-		if(row)
-		{
-			resultLevel.Second = row->Maps[0];
-			UpdateLevelInfo(resultLevel);
-		}
-
-		// Update the CurrentGameTypeIdx value in gamestate. This will also trigger changes in the UI of the other players
-		AGameStateLobby* GameStateLobby = Cast<AGameStateLobby>(UGameplayStatics::GetGameState(GetOwningPlayer()));
-		if(GameStateLobby)
-		{
-			GameStateLobby->Server_SetCurrentGameType(resultGameType);
-			GameStateLobby->Server_SetCurrentLevel(resultLevel);// Also reset level idx to zero, because every gametype will show its own list of available levels
-		}
-	}
-}
-
-void ULobbyMenu::ChangeLevel(int32 direction)
-{
-	const UDataTable* DatatableGameType = GameTypeDatatable.LoadSynchronous();
-	
-	if(IsValid(DatatableGameType))
-	{
-		// Get all the row values
-		FLobbyGameTypeData* rowGameType = DatatableGameType->FindRow<FLobbyGameTypeData>(GetCurrentGameType().Second, TEXT("ULobbyMenu::ChangeLevel"));
-		if(rowGameType)
-		{
-			// Make sure the level selection loops over the options (gametype struct has a an array of level names)
-			const int newIdx = UOlmeHelperFunctions::ShiftInRotation(rowGameType->Maps.Num(), direction, GetCurrentLevel().First);
-			const FName newName = rowGameType->Maps[newIdx];
-			const FPairIntName resultLevel = {newIdx, newName};
-
-			// Update the visual level info
-			UpdateLevelInfo(resultLevel);
-
-			// Update the currentlevel value in gamestate. This will also trigger changes in the UI of the other players
-			AGameStateLobby* GameStateLobby = Cast<AGameStateLobby>(UGameplayStatics::GetGameState(GetOwningPlayer()));
-			if(GameStateLobby)
-			{
-				GameStateLobby->Server_SetCurrentLevel(resultLevel);
-			}
-		}
+		GameStateLobby->Server_ChangeGameType(1);
 	}
 }
 
 void ULobbyMenu::QuitLobby()
 {
-	UGameplayStatics::OpenLevelBySoftObjectPtr(GetOwningPlayer(), LevelAfterQuitLobby);
-	UOnlineSessionFunctions::DestroySession(GetOwningPlayer());
+	APlayerControllerLobby* PC = Cast<APlayerControllerLobby>(GetOwningPlayer());
+	if(PC)
+	{
+		PC->LeaveLobby();
+	}
 }
 
 void ULobbyMenu::StartGame()
@@ -197,7 +180,7 @@ void ULobbyMenu::StartGame()
 
 FPairIntName ULobbyMenu::GetCurrentLevel() const
 {
-	if(const AGameStateLobby* GameStateLobby = Cast<AGameStateLobby>(UGameplayStatics::GetGameState(GetOwningPlayer())))
+	if(const AGameStateLobby* GameStateLobby = AGameStateLobby::GetInstance(GetOwningPlayer()))
 	{
 		return GameStateLobby->GetCurrentLevel();
 	}
@@ -207,7 +190,7 @@ FPairIntName ULobbyMenu::GetCurrentLevel() const
 
 FPairIntName ULobbyMenu::GetCurrentGameType() const
 {
-	if(const AGameStateLobby* GameStateLobby = Cast<AGameStateLobby>(UGameplayStatics::GetGameState(GetOwningPlayer())))
+	if(const AGameStateLobby* GameStateLobby = AGameStateLobby::GetInstance(GetOwningPlayer()))
 	{
 		return GameStateLobby->GetCurrentGameType();
 	}

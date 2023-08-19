@@ -15,26 +15,39 @@ class OLME_API AGameStateLobby : public AGameState
 {
 	GENERATED_BODY()
 
-public:
-	UFUNCTION()
-	void OnRep_CurrentLevel();
-
-	UFUNCTION(Server, Reliable)
-	void Server_SetCurrentLevel(const FPairIntName& Pair);
-
 protected:
 	virtual void BeginPlay() override;
 
 public:
+	static AGameStateLobby* GetInstance(const UObject* WorldContextObject);
+
+	// Level Logic
 	UFUNCTION()
-	void OnRep_GameType();
+	void OnRep_CurrentLevel();
 
 	UFUNCTION(Server, Reliable)
-	void Server_SetCurrentGameType(const FPairIntName& Pair);
+	void Server_ChangeLevel(const int32 Direction);
+
+	// GameType logic
+	UFUNCTION()
+	void OnRep_CurrentGameType();
+
+	UFUNCTION(Server, Reliable)
+	void Server_ChangeGameType(const int32 Direction);
 
 	FPairIntName GetCurrentLevel() const;
 
 	FPairIntName GetCurrentGameType() const;
+
+	// Num of players logic
+	UFUNCTION()
+	void OnRep_MaxNumberOfPlayers();
+
+	int32 GetMaxNumberOfPlayers() const;
+
+	int32 GetMinNumberOfPlayers() const;
+
+	int32 GetCurrentNumberOfPlayers() const;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -47,6 +60,14 @@ private:
 	UPROPERTY(ReplicatedUsing = OnRep_CurrentLevel)
 	FPairIntName CurrentLevel;
 
-	UPROPERTY(ReplicatedUsing = OnRep_GameType)
+	UPROPERTY(ReplicatedUsing = OnRep_CurrentGameType)
 	FPairIntName CurrentGameType;
+	
+	UPROPERTY(Replicated)
+	int32 MinNumberOfPlayers;
+	
+	UPROPERTY(ReplicatedUsing = OnRep_MaxNumberOfPlayers)
+	int32 MaxNumberOfPlayers;
+
+	
 };

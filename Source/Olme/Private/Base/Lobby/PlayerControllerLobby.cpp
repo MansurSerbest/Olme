@@ -3,6 +3,7 @@
 
 #include "Base/Lobby/PlayerControllerLobby.h"
 
+#include "OnlineSessionFunctions.h"
 #include "UISystemFunctions.h"
 #include "Base/Lobby/GameModeLobby.h"
 #include "Base/Lobby/GameStateLobby.h"
@@ -13,7 +14,7 @@
 #include "Structs/OlmeStructs.h"
 #include "UI/Menu/LobbyMenu.h"
 
-void APlayerControllerLobby::UpdatePlayerList_Implementation(const TArray<FLobbyPlayerData>& data)
+void APlayerControllerLobby::UpdatePlayerList_Implementation(const TArray<FLobbyPlayerData>& data, const int32 CurrNrOfPlayers)
 {
 	UOlmeHelperFunctions::PrintNetMode(this, TEXT("APlayerControllerLobby::UpdatePlayerList_Implementation"));
 	
@@ -26,7 +27,7 @@ void APlayerControllerLobby::UpdatePlayerList_Implementation(const TArray<FLobby
 	// Update the player list
 	if(ULobbyMenu* LobbyMenu = Cast<ULobbyMenu>(UUISystemFunctions::GetActiveWidget(this)))
 	{
-		LobbyMenu->UpdatePlayerList(data);
+		LobbyMenu->UpdatePlayerList(data, CurrNrOfPlayers);
 	}
 }
 
@@ -36,6 +37,12 @@ void APlayerControllerLobby::StartGame_Implementation(const FString& Level)
 	{
 		gameMode->StartGame(Level);
 	}
+}
+
+void APlayerControllerLobby::LeaveLobby_Implementation()
+{
+	UGameplayStatics::OpenLevelBySoftObjectPtr(this, LevelAfterQuitLobby);
+	UOnlineSessionFunctions::DestroySession(this);
 }
 
 void APlayerControllerLobby::BeginPlay()
