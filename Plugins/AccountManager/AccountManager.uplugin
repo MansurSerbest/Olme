@@ -14,11 +14,19 @@
 	"IsBetaVersion": false,
 	"IsExperimentalVersion": false,
 	"Installed": false,
-	"Modules": [
+	"Modules": 
+	[
 		{
 			"Name": "AccountManager",
 			"Type": "Runtime",
 			"LoadingPhase": "PreLoadingScreen"
+		}
+	],
+	"Plugins": 
+	[
+		{
+			"Name": "PlayFab",
+			"Enabled": true
 		}
 	]
 }
