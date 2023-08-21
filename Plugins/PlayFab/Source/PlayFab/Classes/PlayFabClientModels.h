@@ -951,6 +951,12 @@ public:
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayFab | Client | Account Management Models")
         FString SteamTicket;
+    /**
+     * True if ticket was generated using ISteamUser::GetAuthTicketForWebAPI() using "AzurePlayFab" as the identity string.
+     * False if the ticket was generated with ISteamUser::GetAuthSessionTicket().
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayFab | Client | Account Management Models")
+        bool TicketIsServiceSpecific = false;
 };
 
 USTRUCT(BlueprintType)
@@ -2328,14 +2334,13 @@ public:
 
 /**
  * Steam sign-in is accomplished with the Steam Session Ticket. More information on the Ticket can be found in the
- * Steamworks SDK, here: https://partner.steamgames.com/documentation/auth (requires sign-in). NOTE: For Steam
- * authentication to work, the title must be configured with the Steam Application ID and Web API Key in the PlayFab Game
- * Manager (under Steam in the Add-ons Marketplace). You can obtain a Web API Key from the Permissions page of any Group
- * associated with your App ID in the Steamworks site. If this is the first time a user has signed in with the Steam
- * account and CreateAccount is set to true, a new PlayFab account will be created and linked to the provided account's
- * Steam ID. In this case, no email or username will be associated with the PlayFab account. Otherwise, if no PlayFab
- * account is linked to the Steam account, an error indicating this will be returned, so that the title can guide the user
- * through creation of a PlayFab account.
+ * Steamworks SDK, here: https://partner.steamgames.com/documentation/auth. NOTE: For Steam authentication to work, the
+ * title must be configured with the Steam Application ID and Web API Key in the PlayFab Game Manager (under Steam in the
+ * Add-ons Marketplace). You can obtain a Web API Key from the Permissions page of any Group associated with your App ID in
+ * the Steamworks site. If this is the first time a user has signed in with the Steam account and CreateAccount is set to
+ * true, a new PlayFab account will be created and linked to the provided account's Steam ID. In this case, no email or
+ * username will be associated with the PlayFab account. Otherwise, if no PlayFab account is linked to the Steam account,
+ * an error indicating this will be returned, so that the title can guide the user through creation of a PlayFab account.
  */
 USTRUCT(BlueprintType)
 struct PLAYFAB_API FClientLoginWithSteamRequest : public FPlayFabRequestCommon
@@ -2363,6 +2368,12 @@ public:
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayFab | Client | Authentication Models")
         FString SteamTicket;
+    /**
+     * True if ticket was generated using ISteamUser::GetAuthTicketForWebAPI() using "AzurePlayFab" as the identity string.
+     * False if the ticket was generated with ISteamUser::GetAuthSessionTicket().
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayFab | Client | Authentication Models")
+        bool TicketIsServiceSpecific = false;
 };
 
 /**

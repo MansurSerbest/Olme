@@ -488,7 +488,7 @@ namespace EconomyModels
          * to 128 platforms can be listed.
          */
         TArray<FString> Platforms;
-        // [optional] A set of player entity keys that are allowed to review content. There is a maximum of 64 entities that can be added.
+        // [optional] A set of player entity keys that are allowed to review content. There is a maximum of 128 entities that can be added.
         TArray<FEntityKey> ReviewerEntities;
         // [optional] The set of configuration that only applies to user generated contents.
         TSharedPtr<FUserGeneratedContentSpecificConfig> UserGeneratedContent;
@@ -667,12 +667,16 @@ namespace EconomyModels
     {
         // [optional] The amounts of the catalog item price. Each price can have up to 15 item amounts.
         TArray<FCatalogPriceAmount> Amounts;
+        // [optional] The per-unit amount this price can be used to purchase.
+        Boxed<int32> UnitAmount;
+
         // [optional] The per-unit duration this price can be used to purchase. The maximum duration is 100 years.
         Boxed<double> UnitDurationInSeconds;
 
         FCatalogPrice() :
             FPlayFabCppBaseModel(),
             Amounts(),
+            UnitAmount(),
             UnitDurationInSeconds()
             {}
 
@@ -1084,7 +1088,10 @@ namespace EconomyModels
          * required. Titles have a 512 character limit per country code.
          */
         TMap<FString, FString> Title;
-        // [optional] The high-level type of the item. The following item types are supported: bundle, catalogItem, currency, store, ugc.
+        /**
+         * [optional] The high-level type of the item. The following item types are supported: bundle, catalogItem, currency, store, ugc,
+         * subscription.
+         */
         FString Type;
 
         FCatalogItem() :
@@ -3211,8 +3218,11 @@ namespace EconomyModels
         TSharedPtr<FEntityKey> Entity;
 
         /**
-         * [optional] An OData filter used to refine the TransactionHistory. Transaction property 'timestamp' can be used in the filter. For
-         * example: "timestamp ge 'timestamp ge'" By default, a 6 month timespan from the current date is used.
+         * [optional] An OData filter used to refine the TransactionHistory. Transaction properties 'timestamp', 'transactionid', 'apiname'
+         * and 'operationtype' can be used in the filter. Properties 'transactionid', 'apiname', and 'operationtype' cannot be used
+         * together in a single request. The 'timestamp' property can be combined with 'apiname' or 'operationtype' in a single
+         * request. For example: "timestamp ge 2023-06-20T23:30Z" or "transactionid eq '10'" or "(timestamp ge 2023-06-20T23:30Z)
+         * and (apiname eq 'AddInventoryItems')". By default, a 6 month timespan from the current date is used.
          */
         FString Filter;
 
@@ -4433,6 +4443,9 @@ namespace EconomyModels
          */
         FString Filter;
 
+        // [optional] The locale to be returned in the result.
+        FString Language;
+
         // [optional] An OData orderBy used to order the results of the search query. For example: "rating/average asc"
         FString OrderBy;
 
@@ -4455,6 +4468,7 @@ namespace EconomyModels
             CustomTags(),
             Entity(nullptr),
             Filter(),
+            Language(),
             OrderBy(),
             Search(),
             Select(),

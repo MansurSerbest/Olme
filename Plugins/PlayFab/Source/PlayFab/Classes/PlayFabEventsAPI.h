@@ -63,6 +63,76 @@ public:
     // PlayStream Events
     //////////////////////////////////////////////////////
     // callbacks
+    DECLARE_DYNAMIC_DELEGATE_TwoParams(FDelegateOnSuccessCreateTelemetryKey, FEventsCreateTelemetryKeyResponse, result, UObject*, customData);
+
+    /** Creates a new telemetry key for the title. */
+    UFUNCTION(BlueprintCallable, Category = "PlayFab | Events | PlayStream Events ", meta = (BlueprintInternalUseOnly = "true"))
+        static UPlayFabEventsAPI* CreateTelemetryKey(FEventsCreateTelemetryKeyRequest request,
+            FDelegateOnSuccessCreateTelemetryKey onSuccess,
+            FDelegateOnFailurePlayFabError onFailure, UObject* customData);
+
+
+    // Implements FOnPlayFabEventsRequestCompleted
+    UFUNCTION(BlueprintCallable, Category = "PlayFab | Events | PlayStream Events ", meta = (BlueprintInternalUseOnly = "true"))
+        void HelperCreateTelemetryKey(FPlayFabBaseModel response, UObject* customData, bool successful);
+
+    // callbacks
+    DECLARE_DYNAMIC_DELEGATE_TwoParams(FDelegateOnSuccessDeleteTelemetryKey, FEventsDeleteTelemetryKeyResponse, result, UObject*, customData);
+
+    /** Deletes a telemetry key configured for the title. */
+    UFUNCTION(BlueprintCallable, Category = "PlayFab | Events | PlayStream Events ", meta = (BlueprintInternalUseOnly = "true"))
+        static UPlayFabEventsAPI* DeleteTelemetryKey(FEventsDeleteTelemetryKeyRequest request,
+            FDelegateOnSuccessDeleteTelemetryKey onSuccess,
+            FDelegateOnFailurePlayFabError onFailure, UObject* customData);
+
+
+    // Implements FOnPlayFabEventsRequestCompleted
+    UFUNCTION(BlueprintCallable, Category = "PlayFab | Events | PlayStream Events ", meta = (BlueprintInternalUseOnly = "true"))
+        void HelperDeleteTelemetryKey(FPlayFabBaseModel response, UObject* customData, bool successful);
+
+    // callbacks
+    DECLARE_DYNAMIC_DELEGATE_TwoParams(FDelegateOnSuccessGetTelemetryKey, FEventsGetTelemetryKeyResponse, result, UObject*, customData);
+
+    /** Gets information about a telemetry key configured for the title. */
+    UFUNCTION(BlueprintCallable, Category = "PlayFab | Events | PlayStream Events ", meta = (BlueprintInternalUseOnly = "true"))
+        static UPlayFabEventsAPI* GetTelemetryKey(FEventsGetTelemetryKeyRequest request,
+            FDelegateOnSuccessGetTelemetryKey onSuccess,
+            FDelegateOnFailurePlayFabError onFailure, UObject* customData);
+
+
+    // Implements FOnPlayFabEventsRequestCompleted
+    UFUNCTION(BlueprintCallable, Category = "PlayFab | Events | PlayStream Events ", meta = (BlueprintInternalUseOnly = "true"))
+        void HelperGetTelemetryKey(FPlayFabBaseModel response, UObject* customData, bool successful);
+
+    // callbacks
+    DECLARE_DYNAMIC_DELEGATE_TwoParams(FDelegateOnSuccessListTelemetryKeys, FEventsListTelemetryKeysResponse, result, UObject*, customData);
+
+    /** Lists all telemetry keys configured for the title. */
+    UFUNCTION(BlueprintCallable, Category = "PlayFab | Events | PlayStream Events ", meta = (BlueprintInternalUseOnly = "true"))
+        static UPlayFabEventsAPI* ListTelemetryKeys(FEventsListTelemetryKeysRequest request,
+            FDelegateOnSuccessListTelemetryKeys onSuccess,
+            FDelegateOnFailurePlayFabError onFailure, UObject* customData);
+
+
+    // Implements FOnPlayFabEventsRequestCompleted
+    UFUNCTION(BlueprintCallable, Category = "PlayFab | Events | PlayStream Events ", meta = (BlueprintInternalUseOnly = "true"))
+        void HelperListTelemetryKeys(FPlayFabBaseModel response, UObject* customData, bool successful);
+
+    // callbacks
+    DECLARE_DYNAMIC_DELEGATE_TwoParams(FDelegateOnSuccessSetTelemetryKeyActive, FEventsSetTelemetryKeyActiveResponse, result, UObject*, customData);
+
+    /** Sets a telemetry key to the active or deactivated state. */
+    UFUNCTION(BlueprintCallable, Category = "PlayFab | Events | PlayStream Events ", meta = (BlueprintInternalUseOnly = "true"))
+        static UPlayFabEventsAPI* SetTelemetryKeyActive(FEventsSetTelemetryKeyActiveRequest request,
+            FDelegateOnSuccessSetTelemetryKeyActive onSuccess,
+            FDelegateOnFailurePlayFabError onFailure, UObject* customData);
+
+
+    // Implements FOnPlayFabEventsRequestCompleted
+    UFUNCTION(BlueprintCallable, Category = "PlayFab | Events | PlayStream Events ", meta = (BlueprintInternalUseOnly = "true"))
+        void HelperSetTelemetryKeyActive(FPlayFabBaseModel response, UObject* customData, bool successful);
+
+    // callbacks
     DECLARE_DYNAMIC_DELEGATE_TwoParams(FDelegateOnSuccessWriteEvents, FEventsWriteEventsResponse, result, UObject*, customData);
 
     /** Write batches of entity based events to PlayStream. The namespace of the Event must be 'custom' or start with 'custom.'. */
@@ -70,6 +140,7 @@ public:
         static UPlayFabEventsAPI* WriteEvents(FEventsWriteEventsRequest request,
             FDelegateOnSuccessWriteEvents onSuccess,
             FDelegateOnFailurePlayFabError onFailure, UObject* customData);
+
 
     // Implements FOnPlayFabEventsRequestCompleted
     UFUNCTION(BlueprintCallable, Category = "PlayFab | Events | PlayStream Events ", meta = (BlueprintInternalUseOnly = "true"))
@@ -87,6 +158,15 @@ public:
             FDelegateOnSuccessWriteTelemetryEvents onSuccess,
             FDelegateOnFailurePlayFabError onFailure, UObject* customData);
 
+    /**
+     * Write batches of entity based events to as Telemetry events (bypass PlayStream) using a Telemetry Key. The namespace must be 'custom' or start
+     * with 'custom.'
+     */
+    UFUNCTION(BlueprintCallable, Category = "PlayFab | Events | PlayStream Events ", meta = (BlueprintInternalUseOnly = "true"))
+        static UPlayFabEventsAPI* WriteTelemetryEventsWithTelemetryKey(FEventsWriteEventsRequest request, FString telemetryKey,
+            FDelegateOnSuccessWriteTelemetryEvents onSuccess,
+            FDelegateOnFailurePlayFabError onFailure, UObject* customData);
+
     // Implements FOnPlayFabEventsRequestCompleted
     UFUNCTION(BlueprintCallable, Category = "PlayFab | Events | PlayStream Events ", meta = (BlueprintInternalUseOnly = "true"))
         void HelperWriteTelemetryEvents(FPlayFabBaseModel response, UObject* customData, bool successful);
@@ -97,6 +177,7 @@ public:
     FString PlayFabRequestURL;
 
     bool useEntityToken = false;
+    bool useTelemetryKey = false;
     bool useSecretKey = false;
     bool useSessionTicket = false;
     bool returnsSessionTicket = false;
@@ -107,8 +188,14 @@ public:
     FString ResponseContent;
     int32 ResponseCode;
     UObject* mCustomData;
+    FString telemetryKey;
 
     FDelegateOnFailurePlayFabError OnFailure;
+    FDelegateOnSuccessCreateTelemetryKey OnSuccessCreateTelemetryKey;
+    FDelegateOnSuccessDeleteTelemetryKey OnSuccessDeleteTelemetryKey;
+    FDelegateOnSuccessGetTelemetryKey OnSuccessGetTelemetryKey;
+    FDelegateOnSuccessListTelemetryKeys OnSuccessListTelemetryKeys;
+    FDelegateOnSuccessSetTelemetryKeyActive OnSuccessSetTelemetryKeyActive;
     FDelegateOnSuccessWriteEvents OnSuccessWriteEvents;
     FDelegateOnSuccessWriteTelemetryEvents OnSuccessWriteTelemetryEvents;
 

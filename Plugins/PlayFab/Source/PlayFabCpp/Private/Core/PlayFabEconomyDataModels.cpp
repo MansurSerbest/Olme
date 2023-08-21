@@ -1220,6 +1220,12 @@ void PlayFab::EconomyModels::FCatalogPrice::writeJSON(JsonWriter& writer) const
     }
 
 
+    if (UnitAmount.notNull())
+    {
+        writer->WriteIdentifierPrefix(TEXT("UnitAmount"));
+        writer->WriteValue(UnitAmount);
+    }
+
     if (UnitDurationInSeconds.notNull())
     {
         writer->WriteIdentifierPrefix(TEXT("UnitDurationInSeconds"));
@@ -1240,6 +1246,13 @@ bool PlayFab::EconomyModels::FCatalogPrice::readFromValue(const TSharedPtr<FJson
         Amounts.Add(FCatalogPriceAmount(CurrentItem->AsObject()));
     }
 
+
+    const TSharedPtr<FJsonValue> UnitAmountValue = obj->TryGetField(TEXT("UnitAmount"));
+    if (UnitAmountValue.IsValid() && !UnitAmountValue->IsNull())
+    {
+        int32 TmpValue;
+        if (UnitAmountValue->TryGetNumber(TmpValue)) { UnitAmount = TmpValue; }
+    }
 
     const TSharedPtr<FJsonValue> UnitDurationInSecondsValue = obj->TryGetField(TEXT("UnitDurationInSeconds"));
     if (UnitDurationInSecondsValue.IsValid() && !UnitDurationInSecondsValue->IsNull())
@@ -8803,6 +8816,12 @@ void PlayFab::EconomyModels::FSearchItemsRequest::writeJSON(JsonWriter& writer) 
         writer->WriteValue(Filter);
     }
 
+    if (Language.IsEmpty() == false)
+    {
+        writer->WriteIdentifierPrefix(TEXT("Language"));
+        writer->WriteValue(Language);
+    }
+
     if (OrderBy.IsEmpty() == false)
     {
         writer->WriteIdentifierPrefix(TEXT("OrderBy"));
@@ -8868,6 +8887,13 @@ bool PlayFab::EconomyModels::FSearchItemsRequest::readFromValue(const TSharedPtr
     {
         FString TmpValue;
         if (FilterValue->TryGetString(TmpValue)) { Filter = TmpValue; }
+    }
+
+    const TSharedPtr<FJsonValue> LanguageValue = obj->TryGetField(TEXT("Language"));
+    if (LanguageValue.IsValid() && !LanguageValue->IsNull())
+    {
+        FString TmpValue;
+        if (LanguageValue->TryGetString(TmpValue)) { Language = TmpValue; }
     }
 
     const TSharedPtr<FJsonValue> OrderByValue = obj->TryGetField(TEXT("OrderBy"));
