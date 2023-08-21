@@ -79,6 +79,272 @@ FString UPlayFabEventsAPI::PercentEncode(const FString& Text)
 ///////////////////////////////////////////////////////
 // PlayStream Events
 //////////////////////////////////////////////////////
+/** Creates a new telemetry key for the title. */
+UPlayFabEventsAPI* UPlayFabEventsAPI::CreateTelemetryKey(FEventsCreateTelemetryKeyRequest request,
+    FDelegateOnSuccessCreateTelemetryKey onSuccess,
+    FDelegateOnFailurePlayFabError onFailure,
+    UObject* customData)
+{
+    // Objects containing request data
+    UPlayFabEventsAPI* manager = NewObject<UPlayFabEventsAPI>();
+    if (manager->IsSafeForRootSet()) manager->AddToRoot();
+    UPlayFabJsonObject* OutRestJsonObj = NewObject<UPlayFabJsonObject>();
+    manager->mCustomData = customData;
+
+    // Assign delegates
+    manager->OnSuccessCreateTelemetryKey = onSuccess;
+    manager->OnFailure = onFailure;
+    manager->OnPlayFabResponse.AddDynamic(manager, &UPlayFabEventsAPI::HelperCreateTelemetryKey);
+
+    // Setup the request
+    manager->SetCallAuthenticationContext(request.AuthenticationContext);
+    manager->PlayFabRequestURL = "/Event/CreateTelemetryKey";
+    manager->useEntityToken = true;
+
+
+    // Serialize all the request properties to json
+    if (request.CustomTags != nullptr) OutRestJsonObj->SetObjectField(TEXT("CustomTags"), request.CustomTags);
+    if (request.Entity != nullptr) OutRestJsonObj->SetObjectField(TEXT("Entity"), request.Entity);
+    if (request.KeyName.IsEmpty() || request.KeyName == "") {
+        OutRestJsonObj->SetFieldNull(TEXT("KeyName"));
+    } else {
+        OutRestJsonObj->SetStringField(TEXT("KeyName"), request.KeyName);
+    }
+
+    // Add Request to manager
+    manager->SetRequestObject(OutRestJsonObj);
+
+    return manager;
+}
+
+// Implements FOnPlayFabEventsRequestCompleted
+void UPlayFabEventsAPI::HelperCreateTelemetryKey(FPlayFabBaseModel response, UObject* customData, bool successful)
+{
+    FPlayFabError error = response.responseError;
+    if (error.hasError && OnFailure.IsBound())
+    {
+        OnFailure.Execute(error, customData);
+    }
+    else if (!error.hasError && OnSuccessCreateTelemetryKey.IsBound())
+    {
+        FEventsCreateTelemetryKeyResponse ResultStruct = UPlayFabEventsModelDecoder::decodeCreateTelemetryKeyResponseResponse(response.responseData);
+        OnSuccessCreateTelemetryKey.Execute(ResultStruct, mCustomData);
+    }
+    this->RemoveFromRoot();
+}
+
+/** Deletes a telemetry key configured for the title. */
+UPlayFabEventsAPI* UPlayFabEventsAPI::DeleteTelemetryKey(FEventsDeleteTelemetryKeyRequest request,
+    FDelegateOnSuccessDeleteTelemetryKey onSuccess,
+    FDelegateOnFailurePlayFabError onFailure,
+    UObject* customData)
+{
+    // Objects containing request data
+    UPlayFabEventsAPI* manager = NewObject<UPlayFabEventsAPI>();
+    if (manager->IsSafeForRootSet()) manager->AddToRoot();
+    UPlayFabJsonObject* OutRestJsonObj = NewObject<UPlayFabJsonObject>();
+    manager->mCustomData = customData;
+
+    // Assign delegates
+    manager->OnSuccessDeleteTelemetryKey = onSuccess;
+    manager->OnFailure = onFailure;
+    manager->OnPlayFabResponse.AddDynamic(manager, &UPlayFabEventsAPI::HelperDeleteTelemetryKey);
+
+    // Setup the request
+    manager->SetCallAuthenticationContext(request.AuthenticationContext);
+    manager->PlayFabRequestURL = "/Event/DeleteTelemetryKey";
+    manager->useEntityToken = true;
+
+
+    // Serialize all the request properties to json
+    if (request.CustomTags != nullptr) OutRestJsonObj->SetObjectField(TEXT("CustomTags"), request.CustomTags);
+    if (request.Entity != nullptr) OutRestJsonObj->SetObjectField(TEXT("Entity"), request.Entity);
+    if (request.KeyName.IsEmpty() || request.KeyName == "") {
+        OutRestJsonObj->SetFieldNull(TEXT("KeyName"));
+    } else {
+        OutRestJsonObj->SetStringField(TEXT("KeyName"), request.KeyName);
+    }
+
+    // Add Request to manager
+    manager->SetRequestObject(OutRestJsonObj);
+
+    return manager;
+}
+
+// Implements FOnPlayFabEventsRequestCompleted
+void UPlayFabEventsAPI::HelperDeleteTelemetryKey(FPlayFabBaseModel response, UObject* customData, bool successful)
+{
+    FPlayFabError error = response.responseError;
+    if (error.hasError && OnFailure.IsBound())
+    {
+        OnFailure.Execute(error, customData);
+    }
+    else if (!error.hasError && OnSuccessDeleteTelemetryKey.IsBound())
+    {
+        FEventsDeleteTelemetryKeyResponse ResultStruct = UPlayFabEventsModelDecoder::decodeDeleteTelemetryKeyResponseResponse(response.responseData);
+        OnSuccessDeleteTelemetryKey.Execute(ResultStruct, mCustomData);
+    }
+    this->RemoveFromRoot();
+}
+
+/** Gets information about a telemetry key configured for the title. */
+UPlayFabEventsAPI* UPlayFabEventsAPI::GetTelemetryKey(FEventsGetTelemetryKeyRequest request,
+    FDelegateOnSuccessGetTelemetryKey onSuccess,
+    FDelegateOnFailurePlayFabError onFailure,
+    UObject* customData)
+{
+    // Objects containing request data
+    UPlayFabEventsAPI* manager = NewObject<UPlayFabEventsAPI>();
+    if (manager->IsSafeForRootSet()) manager->AddToRoot();
+    UPlayFabJsonObject* OutRestJsonObj = NewObject<UPlayFabJsonObject>();
+    manager->mCustomData = customData;
+
+    // Assign delegates
+    manager->OnSuccessGetTelemetryKey = onSuccess;
+    manager->OnFailure = onFailure;
+    manager->OnPlayFabResponse.AddDynamic(manager, &UPlayFabEventsAPI::HelperGetTelemetryKey);
+
+    // Setup the request
+    manager->SetCallAuthenticationContext(request.AuthenticationContext);
+    manager->PlayFabRequestURL = "/Event/GetTelemetryKey";
+    manager->useEntityToken = true;
+
+
+    // Serialize all the request properties to json
+    if (request.CustomTags != nullptr) OutRestJsonObj->SetObjectField(TEXT("CustomTags"), request.CustomTags);
+    if (request.Entity != nullptr) OutRestJsonObj->SetObjectField(TEXT("Entity"), request.Entity);
+    if (request.KeyName.IsEmpty() || request.KeyName == "") {
+        OutRestJsonObj->SetFieldNull(TEXT("KeyName"));
+    } else {
+        OutRestJsonObj->SetStringField(TEXT("KeyName"), request.KeyName);
+    }
+
+    // Add Request to manager
+    manager->SetRequestObject(OutRestJsonObj);
+
+    return manager;
+}
+
+// Implements FOnPlayFabEventsRequestCompleted
+void UPlayFabEventsAPI::HelperGetTelemetryKey(FPlayFabBaseModel response, UObject* customData, bool successful)
+{
+    FPlayFabError error = response.responseError;
+    if (error.hasError && OnFailure.IsBound())
+    {
+        OnFailure.Execute(error, customData);
+    }
+    else if (!error.hasError && OnSuccessGetTelemetryKey.IsBound())
+    {
+        FEventsGetTelemetryKeyResponse ResultStruct = UPlayFabEventsModelDecoder::decodeGetTelemetryKeyResponseResponse(response.responseData);
+        OnSuccessGetTelemetryKey.Execute(ResultStruct, mCustomData);
+    }
+    this->RemoveFromRoot();
+}
+
+/** Lists all telemetry keys configured for the title. */
+UPlayFabEventsAPI* UPlayFabEventsAPI::ListTelemetryKeys(FEventsListTelemetryKeysRequest request,
+    FDelegateOnSuccessListTelemetryKeys onSuccess,
+    FDelegateOnFailurePlayFabError onFailure,
+    UObject* customData)
+{
+    // Objects containing request data
+    UPlayFabEventsAPI* manager = NewObject<UPlayFabEventsAPI>();
+    if (manager->IsSafeForRootSet()) manager->AddToRoot();
+    UPlayFabJsonObject* OutRestJsonObj = NewObject<UPlayFabJsonObject>();
+    manager->mCustomData = customData;
+
+    // Assign delegates
+    manager->OnSuccessListTelemetryKeys = onSuccess;
+    manager->OnFailure = onFailure;
+    manager->OnPlayFabResponse.AddDynamic(manager, &UPlayFabEventsAPI::HelperListTelemetryKeys);
+
+    // Setup the request
+    manager->SetCallAuthenticationContext(request.AuthenticationContext);
+    manager->PlayFabRequestURL = "/Event/ListTelemetryKeys";
+    manager->useEntityToken = true;
+
+
+    // Serialize all the request properties to json
+    if (request.CustomTags != nullptr) OutRestJsonObj->SetObjectField(TEXT("CustomTags"), request.CustomTags);
+    if (request.Entity != nullptr) OutRestJsonObj->SetObjectField(TEXT("Entity"), request.Entity);
+
+    // Add Request to manager
+    manager->SetRequestObject(OutRestJsonObj);
+
+    return manager;
+}
+
+// Implements FOnPlayFabEventsRequestCompleted
+void UPlayFabEventsAPI::HelperListTelemetryKeys(FPlayFabBaseModel response, UObject* customData, bool successful)
+{
+    FPlayFabError error = response.responseError;
+    if (error.hasError && OnFailure.IsBound())
+    {
+        OnFailure.Execute(error, customData);
+    }
+    else if (!error.hasError && OnSuccessListTelemetryKeys.IsBound())
+    {
+        FEventsListTelemetryKeysResponse ResultStruct = UPlayFabEventsModelDecoder::decodeListTelemetryKeysResponseResponse(response.responseData);
+        OnSuccessListTelemetryKeys.Execute(ResultStruct, mCustomData);
+    }
+    this->RemoveFromRoot();
+}
+
+/** Sets a telemetry key to the active or deactivated state. */
+UPlayFabEventsAPI* UPlayFabEventsAPI::SetTelemetryKeyActive(FEventsSetTelemetryKeyActiveRequest request,
+    FDelegateOnSuccessSetTelemetryKeyActive onSuccess,
+    FDelegateOnFailurePlayFabError onFailure,
+    UObject* customData)
+{
+    // Objects containing request data
+    UPlayFabEventsAPI* manager = NewObject<UPlayFabEventsAPI>();
+    if (manager->IsSafeForRootSet()) manager->AddToRoot();
+    UPlayFabJsonObject* OutRestJsonObj = NewObject<UPlayFabJsonObject>();
+    manager->mCustomData = customData;
+
+    // Assign delegates
+    manager->OnSuccessSetTelemetryKeyActive = onSuccess;
+    manager->OnFailure = onFailure;
+    manager->OnPlayFabResponse.AddDynamic(manager, &UPlayFabEventsAPI::HelperSetTelemetryKeyActive);
+
+    // Setup the request
+    manager->SetCallAuthenticationContext(request.AuthenticationContext);
+    manager->PlayFabRequestURL = "/Event/SetTelemetryKeyActive";
+    manager->useEntityToken = true;
+
+
+    // Serialize all the request properties to json
+    OutRestJsonObj->SetBoolField(TEXT("Active"), request.Active);
+    if (request.CustomTags != nullptr) OutRestJsonObj->SetObjectField(TEXT("CustomTags"), request.CustomTags);
+    if (request.Entity != nullptr) OutRestJsonObj->SetObjectField(TEXT("Entity"), request.Entity);
+    if (request.KeyName.IsEmpty() || request.KeyName == "") {
+        OutRestJsonObj->SetFieldNull(TEXT("KeyName"));
+    } else {
+        OutRestJsonObj->SetStringField(TEXT("KeyName"), request.KeyName);
+    }
+
+    // Add Request to manager
+    manager->SetRequestObject(OutRestJsonObj);
+
+    return manager;
+}
+
+// Implements FOnPlayFabEventsRequestCompleted
+void UPlayFabEventsAPI::HelperSetTelemetryKeyActive(FPlayFabBaseModel response, UObject* customData, bool successful)
+{
+    FPlayFabError error = response.responseError;
+    if (error.hasError && OnFailure.IsBound())
+    {
+        OnFailure.Execute(error, customData);
+    }
+    else if (!error.hasError && OnSuccessSetTelemetryKeyActive.IsBound())
+    {
+        FEventsSetTelemetryKeyActiveResponse ResultStruct = UPlayFabEventsModelDecoder::decodeSetTelemetryKeyActiveResponseResponse(response.responseData);
+        OnSuccessSetTelemetryKeyActive.Execute(ResultStruct, mCustomData);
+    }
+    this->RemoveFromRoot();
+}
+
 /** Write batches of entity based events to PlayStream. The namespace of the Event must be 'custom' or start with 'custom.'. */
 UPlayFabEventsAPI* UPlayFabEventsAPI::WriteEvents(FEventsWriteEventsRequest request,
     FDelegateOnSuccessWriteEvents onSuccess,
@@ -154,6 +420,43 @@ UPlayFabEventsAPI* UPlayFabEventsAPI::WriteTelemetryEvents(FEventsWriteEventsReq
     manager->PlayFabRequestURL = "/Event/WriteTelemetryEvents";
     manager->useEntityToken = true;
 
+
+    // Serialize all the request properties to json
+    if (request.CustomTags != nullptr) OutRestJsonObj->SetObjectField(TEXT("CustomTags"), request.CustomTags);
+    if (request.Events.Num() == 0) {
+        OutRestJsonObj->SetFieldNull(TEXT("Events"));
+    } else {
+        OutRestJsonObj->SetObjectArrayField(TEXT("Events"), request.Events);
+    }
+
+    // Add Request to manager
+    manager->SetRequestObject(OutRestJsonObj);
+
+    return manager;
+}
+
+/** Write batches of entity based events to as Telemetry events (bypass PlayStream) using a Telemetry Key. The namespace must be 'custom' or start with 'custom.' */
+UPlayFabEventsAPI* UPlayFabEventsAPI::WriteTelemetryEventsWithTelemetryKey(FEventsWriteEventsRequest request,
+    FString telemetryKey,
+    FDelegateOnSuccessWriteTelemetryEvents onSuccess,
+    FDelegateOnFailurePlayFabError onFailure,
+    UObject* customData)
+{
+    // Objects containing request data
+    UPlayFabEventsAPI* manager = NewObject<UPlayFabEventsAPI>();
+    if (manager->IsSafeForRootSet()) manager->AddToRoot();
+    UPlayFabJsonObject* OutRestJsonObj = NewObject<UPlayFabJsonObject>();
+    manager->mCustomData = customData;
+
+    // Assign delegates
+    manager->OnSuccessWriteTelemetryEvents = onSuccess;
+    manager->OnFailure = onFailure;
+    manager->OnPlayFabResponse.AddDynamic(manager, &UPlayFabEventsAPI::HelperWriteTelemetryEvents);
+
+    // Setup the request
+    manager->PlayFabRequestURL = "/Event/WriteTelemetryEvents";
+    manager->useTelemetryKey = true;
+    manager->telemetryKey = telemetryKey;
 
     // Serialize all the request properties to json
     if (request.CustomTags != nullptr) OutRestJsonObj->SetObjectField(TEXT("CustomTags"), request.CustomTags);
@@ -304,6 +607,15 @@ void UPlayFabEventsAPI::Activate()
         if (!AuthValue.IsEmpty())
         {
             HttpRequest->SetHeader(TEXT("X-SecretKey"), AuthValue);
+            AuthSet = true;
+        }
+    }
+
+    if (useTelemetryKey && !AuthSet)
+    {
+        if (!telemetryKey.IsEmpty())
+        {
+            HttpRequest->SetHeader(TEXT("X-TelemetryKey"), telemetryKey);
             AuthSet = true;
         }
     }

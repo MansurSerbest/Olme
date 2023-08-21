@@ -655,6 +655,7 @@ namespace PlayFab
         PlayFabErrorMultiplayerServerBuildReferencedByMatchmakingQueue = 6002,
         PlayFabErrorMultiplayerServerBuildReferencedByBuildAlias = 6003,
         PlayFabErrorMultiplayerServerBuildAliasReferencedByMatchmakingQueue = 6004,
+        PlayFabErrorPartySerializationError = 6005,
         PlayFabErrorExperimentationExperimentStopped = 7000,
         PlayFabErrorExperimentationExperimentRunning = 7001,
         PlayFabErrorExperimentationExperimentNotFound = 7002,
@@ -744,7 +745,9 @@ namespace PlayFab
         PlayFabErrorPlayerCustomPropertiesVersionMismatch = 19004,
         PlayFabErrorPlayerCustomPropertiesPropertyCountTooHigh = 19005,
         PlayFabErrorPlayerCustomPropertiesDuplicatePropertyName = 19006,
-        PlayFabErrorPlayerCustomPropertiesPropertyDoesNotExist = 19007
+        PlayFabErrorPlayerCustomPropertiesPropertyDoesNotExist = 19007,
+        PlayFabErrorAddonAlreadyExists = 19008,
+        PlayFabErrorAddonDoesntExist = 19009
     };
 
     struct PLAYFABCPP_API FPlayFabCppError
