@@ -27,11 +27,27 @@ private:
 	void LoginPlayfabAccount();
 
 	UFUNCTION()
+	void LoginEpicGamesAcount();
+
+	UFUNCTION()
 	void RegisterAccount();
 
-	void OnLoginFinished(bool Result);
+	void OnLoginCompletedPlayfab(bool Result);
+
+	void StartLogin();
+
+	void FinishLogin();
+
+	void OnLoginCompletedEpicGames(bool Result);
+
+#if WITH_EDITOR
+	void AutoLoginWithPlayfab();
+
+	void AutoLoginWithEpicGames();
+#endif
 	
 protected:
+	// Login via Playfab
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UButton* LoginButton;
 
@@ -47,6 +63,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UTextBlock* RetryText;
 
+	// Login Via Epic Games
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UButton* LoginEpicGamesButton;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UCircularThrobber* LoginInThrobber;
 
@@ -57,5 +77,6 @@ protected:
 	TSubclassOf<UUserWidget> MenuWidgetClass;
 
 private:
-	FDelegateHandle OnLoginFinishedDelegateHandle;
+	FDelegateHandle OnLoginFinishedPlayfabDelegateHandle;
+	FDelegateHandle OnLoginFinishedEpicGamesDelegateHandle;
 };

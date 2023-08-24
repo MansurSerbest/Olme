@@ -49,7 +49,7 @@ void APlayerStateLobby::BeginPlay()
 	
 	UOlmeHelperFunctions::PrintNetMode(this, TEXT("APlayerStateLobby::BeginPlay()"));
 
-	PlayerData.DisplayName = FText::FromString(UAccountManagerFunctions::GetPlayfabUsername(this));
+	PlayerData.DisplayName = FText::FromString(UAccountManagerFunctions::GetCachedUsername(this));
 	APlayerControllerLobby* pc = Cast<APlayerControllerLobby>(UGameplayStatics::GetPlayerController(this, 0));
 	
 	// The client which connected to the (listen)-server
