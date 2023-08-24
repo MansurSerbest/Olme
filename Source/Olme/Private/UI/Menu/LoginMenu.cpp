@@ -14,13 +14,80 @@ void ULoginMenu::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	LoginButton->OnPressed.AddDynamic(this, &ULoginMenu::LoginPlayfabAccount);
+	LoginButton->OnPressed.AddDynamic(this, &ULoginMenu::LoginEpicGamesAcount);
 	RegisterButton->OnPressed.AddDynamic(this, &ULoginMenu::RegisterAccount);
+	LoginEpicGamesButton->OnPressed.AddDynamic(this, &ULoginMenu::LoginEpicGamesAcount);
 
 	RetryText->SetVisibility(ESlateVisibility::Collapsed);
 	LoginInThrobber->SetVisibility(ESlateVisibility::Hidden);
 
 #if WITH_EDITOR
+	AutoLoginWithEpicGames();
+#endif
+	
+}
+
+void ULoginMenu::LoginPlayfabAccount()
+{
+	// Bind First
+	OnLoginFinishedPlayfabDelegateHandle = UAccountManagerFunctions::GetSubsystem(GetOwningPlayer())->OnLoginPlayfabAccountDelegate.AddUObject(this, &ULoginMenu::OnLoginCompletedPlayfab);
+	UAccountManagerFunctions::LoginPlayfabAccount(GetOwningPlayer(), UsernamePrompt->GetText().ToString(), PasswordPrompt->GetText().ToString());
+	StartLogin();
+}
+
+void ULoginMenu::LoginEpicGamesAcount()
+{
+	OnLoginFinishedEpicGamesDelegateHandle = UAccountManagerFunctions::GetSubsystem(GetOwningPlayer())->OnLoginCompleteEpicGamesAccountDelegate.AddUObject(this, &ULoginMenu::OnLoginCompletedEpicGames);
+	UAccountManagerFunctions::LoginEpicGamesAccount(GetOwningPlayer());
+	StartLogin();
+}
+
+void ULoginMenu::RegisterAccount()
+{
+	UUISystemFunctions::ReplaceWidgetFromClass(GetOwningPlayer(), RegisterAccountWidgetClass);
+}
+
+void ULoginMenu::OnLoginCompletedPlayfab(bool Result)
+{
+	FinishLogin();
+	UAccountManagerFunctions::GetSubsystem(GetOwningPlayer())->OnLoginPlayfabAccountDelegate.Remove(OnLoginFinishedPlayfabDelegateHandle);
+	if(Result)
+	{
+		UUISystemFunctions::ReplaceWidgetFromClass(GetOwningPlayer(), MenuWidgetClass);
+	}
+	else
+	{
+		RetryText->SetVisibility(ESlateVisibility::HitTestInvisible);
+	}
+}
+
+void ULoginMenu::StartLogin()
+{
+	LoginInThrobber->SetVisibility(ESlateVisibility::Visible);
+}
+
+void ULoginMenu::FinishLogin()
+{
+	LoginInThrobber->SetVisibility(ESlateVisibility::Hidden);
+}
+
+void ULoginMenu::OnLoginCompletedEpicGames(bool Result)
+{
+	FinishLogin();
+	UAccountManagerFunctions::GetSubsystem(GetOwningPlayer())->OnLoginCompleteEpicGamesAccountDelegate.Remove(OnLoginFinishedEpicGamesDelegateHandle);
+	if(Result)
+	{
+		UUISystemFunctions::ReplaceWidgetFromClass(GetOwningPlayer(), MenuWidgetClass);
+	}
+	else
+	{
+		RetryText->SetVisibility(ESlateVisibility::HitTestInvisible);
+	}
+}
+
+#if WITH_EDITOR
+void ULoginMenu::AutoLoginWithPlayfab()
+{
 	if(GetOwningPlayer()->GetWorld()->WorldType == EWorldType::PIE)
 	{
 		if (GetWorld()->GetNetMode() == NM_Standalone)
@@ -41,39 +108,42 @@ void ULoginMenu::NativeConstruct()
 				break;
 			}
 			
-			OnLoginFinishedDelegateHandle = UAccountManagerFunctions::GetSubsystem(GetOwningPlayer())->OnLoginPlayfabAccountDelegate.AddUObject(this, &ULoginMenu::OnLoginFinished);
+			OnLoginFinishedPlayfabDelegateHandle = UAccountManagerFunctions::GetSubsystem(GetOwningPlayer())->OnLoginPlayfabAccountDelegate.AddUObject(this, &ULoginMenu::OnLoginCompletedPlayfab);
 			UAccountManagerFunctions::LoginPlayfabAccount(GetOwningPlayer(), UserName, Password);
 			LoginInThrobber->SetVisibility(ESlateVisibility::Visible);
 		}
 	}
+}
+
+void ULoginMenu::AutoLoginWithEpicGames()
+{
+	if(GetOwningPlayer()->GetWorld()->WorldType == EWorldType::PIE)
+	{
+		FOnlineAccountCredentials Credentials;
+		Credentials.Type = TEXT("developer");
+		Credentials.Id = TEXT("localhost:8081");
+		if (GetWorld()->GetNetMode() == NM_Standalone)
+		{
+			switch(GPlayInEditorID)
+			{
+			case 0:
+				Credentials.Token = TEXT("NeskekGames");
+				break;
+			case 1:
+				Credentials.Token = TEXT("ManSer92");
+				break;
+			case 2:
+				Credentials.Token = TEXT("Saricari92");
+				break;
+			default:
+					break; // Do nothing
+			}
+		}
+
+		OnLoginFinishedEpicGamesDelegateHandle = UAccountManagerFunctions::GetSubsystem(GetOwningPlayer())->OnLoginCompleteEpicGamesAccountDelegate.AddUObject(this, &ULoginMenu::OnLoginCompletedEpicGames);
+		UAccountManagerFunctions::LoginWithCredentialsEpicGamesAccount(GetOwningPlayer(), Credentials);
+		StartLogin();
+	}
+}
 #endif
-	
-}
 
-void ULoginMenu::LoginPlayfabAccount()
-{
-	// Bind First
-	OnLoginFinishedDelegateHandle = UAccountManagerFunctions::GetSubsystem(GetOwningPlayer())->OnLoginPlayfabAccountDelegate.AddUObject(this, &ULoginMenu::OnLoginFinished);
-	UAccountManagerFunctions::LoginPlayfabAccount(GetOwningPlayer(), UsernamePrompt->GetText().ToString(), PasswordPrompt->GetText().ToString());
-	LoginInThrobber->SetVisibility(ESlateVisibility::Visible);
-}
-
-void ULoginMenu::RegisterAccount()
-{
-	UUISystemFunctions::ReplaceWidgetFromClass(GetOwningPlayer(), RegisterAccountWidgetClass);
-}
-
-void ULoginMenu::OnLoginFinished(bool Result)
-{
-	UAccountManagerFunctions::GetSubsystem(GetOwningPlayer())->OnLoginPlayfabAccountDelegate.Remove(OnLoginFinishedDelegateHandle);
-	if(Result)
-	{
-		UUISystemFunctions::ReplaceWidgetFromClass(GetOwningPlayer(), MenuWidgetClass);
-	}
-	else
-	{
-		RetryText->SetVisibility(ESlateVisibility::HitTestInvisible);
-	}
-
-	LoginInThrobber->SetVisibility(ESlateVisibility::Hidden);
-}

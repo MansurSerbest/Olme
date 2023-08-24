@@ -6,6 +6,7 @@
 #include "AccountManagerFunctions.generated.h"
 
 class UAccountManagerSubsystem;
+class FOnlineAccountCredentials;
 /* 
 *	
 */
@@ -26,5 +27,10 @@ public:
 	static void LoginPlayfabAccount(const UObject* WorldContextObject, const FString& UsernameOrEmail, const FString& Password);
 
 	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-	static FString GetPlayfabUsername(const UObject* WorldContextObject);
+	static FString GetCachedUsername(const UObject* WorldContextObject);
+
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+	static void LoginEpicGamesAccount(const UObject* WorldContextObject);
+	
+	static void LoginWithCredentialsEpicGamesAccount(const UObject* WorldContextObject, const FOnlineAccountCredentials& Credentials);
 };

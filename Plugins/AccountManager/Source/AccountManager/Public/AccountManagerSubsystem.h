@@ -5,11 +5,14 @@
 #include "CoreMinimal.h"
 #include "PlayFabClientDataModels.h"
 #include "PlayFabError.h"
+#include "Interfaces/OnlineIdentityInterface.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "AccountManagerSubsystem.generated.h"
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnRegisterPlayfabAccountDelegate, bool);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnLoginPlayfabAccountDelegate, bool);
+
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnLoginCompleteEpicGamesAccout, bool);
 
 /**
  * 
@@ -20,18 +23,29 @@ class ACCOUNTMANAGER_API UAccountManagerSubsystem : public UGameInstanceSubsyste
 	GENERATED_BODY()
 	
 public:
+	// PLAYFAB LOGIC
 	void RegisterPlayfabAccount(const FString& Email, const FString& Username, const FString& Password);
 	FOnRegisterPlayfabAccountDelegate OnRegisterPlayfabAccountDelegate;
 	void OnRegisterSuccess(const PlayFab::ClientModels::FRegisterPlayFabUserResult& Result);
 	void OnRegisterFailed(const PlayFab::FPlayFabCppError& Result);
 
 	void LoginPlayfabAccount(const FString& UsernameOrEmail, const FString& Password);
-	FOnLoginPlayfabAccountDelegate OnLoginPlayfabAccountDelegate;
 	void OnLoginSuccess(const PlayFab::ClientModels::FLoginResult& Result);
 	void OnLoginFailed(const PlayFab::FPlayFabCppError& Result);
 
-	FString GetPlayfabId() const;
+	FString GetUserNameCached() const;
+
+	// EPIC GAMES LOGIC
+	void LoginEpicGamesAccount();
+	void LoginWithCredentialsEpicGamesAccount(const FOnlineAccountCredentials& Credentials);
+	void SetUserNameCachedEpicGamesAccount(const IOnlineIdentityPtr& Identity);
+
+public:
+	FOnLoginPlayfabAccountDelegate OnLoginPlayfabAccountDelegate;
+	FOnLoginCompleteEpicGamesAccout OnLoginCompleteEpicGamesAccountDelegate;
 	
 private:
-	FString PlayfabUsernameCached;
+	FString UsernameCached;
+
+	FDelegateHandle LoginDelegateHandle;
 };

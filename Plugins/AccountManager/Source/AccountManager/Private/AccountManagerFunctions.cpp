@@ -28,13 +28,30 @@ void UAccountManagerFunctions::LoginPlayfabAccount(const UObject* WorldContextOb
 	}
 }
 
-FString UAccountManagerFunctions::GetPlayfabUsername(const UObject* WorldContextObject)
+FString UAccountManagerFunctions::GetCachedUsername(const UObject* WorldContextObject)
 {
 	FString ReturnValue;
 	if(UAccountManagerSubsystem* Subsystem = GetSubsystem(WorldContextObject))
 	{
-		ReturnValue = Subsystem->GetPlayfabId();
+		ReturnValue = Subsystem->GetUserNameCached();
 	}
 
 	return ReturnValue;
+}
+
+void UAccountManagerFunctions::LoginEpicGamesAccount(const UObject* WorldContextObject)
+{
+	if(UAccountManagerSubsystem* Subsystem = GetSubsystem(WorldContextObject))
+	{
+		Subsystem->LoginEpicGamesAccount();
+	}
+}
+
+void UAccountManagerFunctions::LoginWithCredentialsEpicGamesAccount(const UObject* WorldContextObject,
+	const FOnlineAccountCredentials& Credentials)
+{
+	if(UAccountManagerSubsystem* Subsystem = GetSubsystem(WorldContextObject))
+	{
+		Subsystem->LoginWithCredentialsEpicGamesAccount(Credentials);
+	}
 }

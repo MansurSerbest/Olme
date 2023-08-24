@@ -3,6 +3,8 @@
 
 #include "SessionSubsystem.h"
 #include "OnlineSubsystemUtils.h"
+#include "Online/OnlineSessionNames.h"
+#include "OnlineSessionSettings.h"
 
 USessionSubsystem::USessionSubsystem()
 	:CreateSessionCompleteDelegate(FOnCreateSessionCompleteDelegate::CreateUObject(this, &USessionSubsystem::OnCreateSessionCompleted))

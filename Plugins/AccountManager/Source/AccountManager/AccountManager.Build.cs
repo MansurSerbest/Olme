@@ -28,7 +28,10 @@ public class AccountManager : ModuleRules
 				"Core",
 				"PlayFab",
 				"PlayFabCpp",
-				"PlayFabCommon"
+				"PlayFabCommon",
+				"OnlineSubsystem",
+				"OnlineSubsystemUtils",
+				"OnlineSubsystemEOS"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
