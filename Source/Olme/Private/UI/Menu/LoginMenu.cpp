@@ -53,7 +53,7 @@ void ULoginMenu::OnLoginCompletedPlayfab(bool Result)
 	UAccountManagerFunctions::GetSubsystem(GetOwningPlayer())->OnLoginPlayfabAccountDelegate.Remove(OnLoginFinishedPlayfabDelegateHandle);
 	if(Result)
 	{
-		UUISystemFunctions::ReplaceWidgetFromClass(GetOwningPlayer(), MenuWidgetClass);
+		UGameplayStatics::OpenLevelBySoftObjectPtr(GetOwningPlayer(), MainMenuLevel);
 	}
 	else
 	{
@@ -77,7 +77,7 @@ void ULoginMenu::OnLoginCompletedEpicGames(bool Result)
 	UAccountManagerFunctions::GetSubsystem(GetOwningPlayer())->OnLoginCompleteEpicGamesAccountDelegate.Remove(OnLoginFinishedEpicGamesDelegateHandle);
 	if(Result)
 	{
-		UUISystemFunctions::ReplaceWidgetFromClass(GetOwningPlayer(), MenuWidgetClass);
+		UGameplayStatics::OpenLevelBySoftObjectPtr(GetOwningPlayer(), MainMenuLevel);
 	}
 	else
 	{
@@ -130,7 +130,7 @@ void ULoginMenu::AutoLoginWithEpicGames()
 				Credentials.Token = TEXT("NeskekGames");
 				break;
 			case 1:
-				Credentials.Token = TEXT("ManSer92");
+				Credentials.Token = TEXT("MansurSerbest");
 				break;
 			case 2:
 				Credentials.Token = TEXT("Saricari92");
