@@ -74,7 +74,7 @@ protected:
 	TSubclassOf<UUserWidget> RegisterAccountWidgetClass;
 
 	UPROPERTY(EditDefaultsOnly, Category = DefaultClasses)
-	TSubclassOf<UUserWidget> MenuWidgetClass;
+	TSoftObjectPtr<UWorld> MainMenuLevel;
 
 private:
 	FDelegateHandle OnLoginFinishedPlayfabDelegateHandle;
