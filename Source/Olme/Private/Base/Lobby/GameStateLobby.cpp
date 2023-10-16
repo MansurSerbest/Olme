@@ -3,6 +3,8 @@
 
 #include "Base/Lobby/GameStateLobby.h"
 
+#include "OnlineSessionFunctions.h"
+#include "OnlineSessionStructs.h"
 #include "UISystemFunctions.h"
 #include "HelperFunctions/OlmeHelperFunctions.h"
 #include "Kismet/GameplayStatics.h"
@@ -46,6 +48,8 @@ void AGameStateLobby::BeginPlay()
 			Widget->UpdateGameTypeInfo(CurrentGameType);
 			Widget->UpdatePlayerNumberInfo(1, MaxNumberOfPlayers);
 		}
+
+		Server_ChangeGameType_Implementation(0);
 	}
 }
 
@@ -135,10 +139,16 @@ void AGameStateLobby::Server_ChangeGameType_Implementation(const int32 Direction
 			// Update Number of player data
 			MinNumberOfPlayers = row->MinNrOfPlayers;
 			MaxNumberOfPlayers = row->MaxNrOfPlayers;
+			
 			// Also update it on the server
 			OnRep_MaxNumberOfPlayers();
-		}
 
+			// Update the session
+			FOnlineSessionSettingsProxy settings;
+			settings.bIsLanMatch = true;
+			settings.NrOfPlayers = MaxNumberOfPlayers;
+			UOnlineSessionFunctions::UpdateSession(this, settings);
+		}
 	}
 }
 

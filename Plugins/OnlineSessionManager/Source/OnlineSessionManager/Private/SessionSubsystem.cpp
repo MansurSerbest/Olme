@@ -5,6 +5,7 @@
 #include "OnlineSubsystemUtils.h"
 #include "Online/OnlineSessionNames.h"
 #include "OnlineSessionSettings.h"
+#include "OnlineSessionStructs.h"
 
 USessionSubsystem::USessionSubsystem()
 	:CreateSessionCompleteDelegate(FOnCreateSessionCompleteDelegate::CreateUObject(this, &USessionSubsystem::OnCreateSessionCompleted))
@@ -60,7 +61,7 @@ void USessionSubsystem::CreateSession(int32 NumPublicConnections, bool bIsLanMat
 	}
 }
 
-void USessionSubsystem::UpdateSession()
+void USessionSubsystem::UpdateSession(const FOnlineSessionSettingsProxy& Settings)
 {
 	const IOnlineSessionPtr SessionInterface = Online::GetSessionInterface(GetWorld());
 	if(!SessionInterface.IsValid())
@@ -68,10 +69,13 @@ void USessionSubsystem::UpdateSession()
 		OnUpdateSessionCompleteEvent.Broadcast(false);
 		return;
 	}
-
+	
 	TSharedPtr<FOnlineSessionSettings> UpdatedSessionSettings = MakeShareable(new FOnlineSessionSettings(*LastSessionSettings));
 	UpdatedSessionSettings->Set(SETTING_MAPNAME, FString(TEXT("Updated Level Name")), EOnlineDataAdvertisementType::ViaOnlineService);
-
+	// Update LastSessionSettings data
+	UpdatedSessionSettings->NumPublicConnections = Settings.NrOfPlayers;
+	UpdatedSessionSettings->bIsLANMatch = Settings.bIsLanMatch;
+	
 	UpdateSessionCompleteDelegateHandle = SessionInterface->AddOnUpdateSessionCompleteDelegate_Handle(UpdateSessionCompleteDelegate);
 
 	if(!SessionInterface->UpdateSession(NAME_GameSession, *UpdatedSessionSettings))
@@ -199,9 +203,18 @@ void USessionSubsystem::OnUpdateSessionCompleted(FName SessionName, bool bIsSucc
 	if(SessionInterface.IsValid())
 	{
 		SessionInterface->ClearOnUpdateSessionCompleteDelegate_Handle(UpdateSessionCompleteDelegateHandle);
+
+		// Also update the session
+		SessionInterface->UpdateSession(NAME_GameSession, *LastSessionSettings);
+		FNamedOnlineSession* session = SessionInterface->GetNamedSession(NAME_GameSession);
+		if(session)
+		{
+			session->NumOpenPublicConnections = LastSessionSettings->NumPublicConnections - session->RegisteredPlayers.Num();
+		}
 	}
 
 	OnUpdateSessionCompleteEvent.Broadcast(bIsSuccess);
+
 }
 
 void USessionSubsystem::OnStartSessionCompleted(FName SessionName, bool bIsSuccess)

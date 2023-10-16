@@ -36,4 +36,6 @@ private:
 	// Track this too to have an order of the list of states
 	UPROPERTY()
 	TArray<APlayerStateLobby*> LoggedInPlayerStates;
+
+	friend class UOnlineSessionFunctions;
 };

@@ -36,5 +36,6 @@ void UFindSessionMenu::OnSessionFound(const TArray<FOnlineSessionSearchResult>& 
 
 void UFindSessionMenu::FindSessions()
 {
+	ListOfSessions->ClearChildren();
 	UOnlineSessionFunctions::FindSessions(GetOwningPlayer(), 10, true);
 }

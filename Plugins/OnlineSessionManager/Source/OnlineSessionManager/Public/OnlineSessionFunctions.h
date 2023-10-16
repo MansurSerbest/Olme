@@ -7,6 +7,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "OnlineSessionFunctions.generated.h"
 
+struct FOnlineSessionSettingsProxy;
 /**
  * 
  */
@@ -29,8 +30,7 @@ public:
 	/*
 	 * Calls interface function to update a session
 	 */
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-	static void UpdateSession(const UObject* WorldContextObject);
+	static void UpdateSession(const UObject* WorldContextObject, const FOnlineSessionSettingsProxy& Settings);
 
 	/*
 	 * Calls interface function to start a session
