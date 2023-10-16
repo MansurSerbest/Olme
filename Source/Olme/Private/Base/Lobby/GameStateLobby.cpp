@@ -49,6 +49,7 @@ void AGameStateLobby::BeginPlay()
 			Widget->UpdatePlayerNumberInfo(1, MaxNumberOfPlayers);
 		}
 
+		// Call this to update the session with the correct session settings and data
 		Server_ChangeGameType_Implementation(0);
 	}
 }

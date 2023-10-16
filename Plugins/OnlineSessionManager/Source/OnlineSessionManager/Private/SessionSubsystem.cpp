@@ -209,6 +209,7 @@ void USessionSubsystem::OnUpdateSessionCompleted(FName SessionName, bool bIsSucc
 		FNamedOnlineSession* session = SessionInterface->GetNamedSession(NAME_GameSession);
 		if(session)
 		{
+			// Set the number of open public connections (number of openings for players to join)
 			session->NumOpenPublicConnections = LastSessionSettings->NumPublicConnections - session->RegisteredPlayers.Num();
 		}
 	}
