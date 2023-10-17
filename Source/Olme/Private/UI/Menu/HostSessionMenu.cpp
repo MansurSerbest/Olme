@@ -4,6 +4,7 @@
 #include "UI/Menu/HostSessionMenu.h"
 
 #include "OnlineSessionFunctions.h"
+#include "Base/GameInstance/GameInstanceOlme.h"
 #include "GameFramework/OnlineSession.h"
 #include "Kismet/GameplayStatics.h"
 #include "Olme/Olme.h"
@@ -34,7 +35,11 @@ void UHostSessionMenu::OnCreateSession(bool Success)
 	
 	if(Success)
 	{
-		UE_LOG(LogOlme, Warning, TEXT("ON CREATE SESSION SUCCESSFUL"));
-		UGameplayStatics::OpenLevel(GetOwningPlayer(), FName(TEXT("MAP_Lobby")), true, TEXT("listen"));
+		if(UGameInstanceOlme* Instance = Cast<UGameInstanceOlme>(UGameplayStatics::GetGameInstance(GetOwningPlayer())))
+		{
+			UE_LOG(LogOlme, Log, TEXT("UHostSessionMenu::OnCreateSession: ON CREATE SESSION SUCCESSFUL"));
+			UGameplayStatics::OpenLevelBySoftObjectPtr(GetOwningPlayer(), Instance->GetLobbyMap(), true, TEXT("listen"));
+		}
+
 	}
 }
