@@ -35,4 +35,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class USessionResultEntry> SessionResultType;
+
+private:
+	FDelegateHandle FindSessionCompleteHandle;
 };

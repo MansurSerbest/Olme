@@ -5,6 +5,7 @@
 
 #include "OnlineSessionFunctions.h"
 #include "UISystemFunctions.h"
+#include "Base/GameInstance/GameInstanceOlme.h"
 #include "Base/Lobby/GameModeLobby.h"
 #include "Base/Lobby/GameStateLobby.h"
 #include "Base/Lobby/HUDLobby.h"
@@ -41,8 +42,11 @@ void APlayerControllerLobby::StartGame_Implementation(const FString& Level)
 
 void APlayerControllerLobby::LeaveLobby_Implementation()
 {
-	UGameplayStatics::OpenLevelBySoftObjectPtr(this, LevelAfterQuitLobby);
-	UOnlineSessionFunctions::DestroySession(this);
+	if(UGameInstanceOlme* Instance = Cast<UGameInstanceOlme>(UGameplayStatics::GetGameInstance(this)))
+	{
+		UGameplayStatics::OpenLevelBySoftObjectPtr(this, Instance->GetMainMenuMap());
+		UOnlineSessionFunctions::DestroySession(this);
+	}
 }
 
 void APlayerControllerLobby::BeginPlay()

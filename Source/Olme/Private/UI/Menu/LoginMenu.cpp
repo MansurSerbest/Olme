@@ -101,7 +101,7 @@ void ULoginMenu::AutoLoginWithPlayfab()
 				UserName = TEXT("saricari92");
 				break;
 			case 1:
-				UserName = TEXT("neskek92");
+				UserName = TEXT("neskekgames");
 				break;
 			case 2:
 				UserName = TEXT("manser92");
