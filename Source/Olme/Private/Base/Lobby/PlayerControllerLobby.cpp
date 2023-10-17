@@ -7,13 +7,11 @@
 #include "UISystemFunctions.h"
 #include "Base/GameInstance/GameInstanceOlme.h"
 #include "Base/Lobby/GameModeLobby.h"
-#include "Base/Lobby/GameStateLobby.h"
 #include "Base/Lobby/HUDLobby.h"
-#include "Base/Lobby/PlayerStateLobby.h"
 #include "HelperFunctions/OlmeHelperFunctions.h"
 #include "Kismet/GameplayStatics.h"
 #include "Structs/OlmeStructs.h"
-#include "UI/Menu/LobbyMenu.h"
+#include "Gameplay/Lobby/UI/LobbyMenu.h"
 
 void APlayerControllerLobby::UpdatePlayerList_Implementation(const TArray<FLobbyPlayerData>& data, const int32 CurrNrOfPlayers)
 {
