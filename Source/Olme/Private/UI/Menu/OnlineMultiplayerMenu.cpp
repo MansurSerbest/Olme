@@ -3,6 +3,7 @@
 
 #include "UI/Menu/OnlineMultiplayerMenu.h"
 
+#include "OnlineSessionFunctions.h"
 #include "UISystemFunctions.h"
 #include "UI/Menu/FindSessionMenu.h"
 

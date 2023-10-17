@@ -3,11 +3,15 @@
 
 #include "Character/RPS/CharacterRPS.h"
 
+#include "Components/WidgetComponent.h"
+
 // Sets default values
 ACharacterRPS::ACharacterRPS()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	WidgetComponent = CreateDefaultSubobject<UWidgetComponent>(FName(TEXT("WidgetComponent")));
 
 }
 

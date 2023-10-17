@@ -75,12 +75,6 @@ void ULobbyMenu::UpdateGameTypeInfo(const FPairIntName& Pair)
 			GameTypeName->SetText(row->DisplayName);
 		}
 	}
-
-	// // Disable Start Game Button if current player number is less than the minimum
-	// if(AGameStateLobby* gs = AGameStateLobby::GetInstance(GetOwningPlayer()))
-	// {
-	// 	gs->PlayerArray.Num() >= gs->GetMinNumberOfPlayers()? StartGameButton->SetIsEnabled(true) : StartGameButton->SetIsEnabled(false);
-	// }
 }
 
 void ULobbyMenu::UpdatePlayerNumberInfo(const int32 CurrNumberOfPlayers, const int32 MaxNumberOfPlayers)
@@ -91,7 +85,8 @@ void ULobbyMenu::UpdatePlayerNumberInfo(const int32 CurrNumberOfPlayers, const i
 	// Disable Start Game Button if current player number is less than the minimum
 	if(AGameStateLobby* gs = AGameStateLobby::GetInstance(GetOwningPlayer()))
 	{
-		CurrNumberOfPlayers >= gs->GetMinNumberOfPlayers()? StartGameButton->SetIsEnabled(true) : StartGameButton->SetIsEnabled(false);
+		const bool bNumberOfPlayersValid = CurrNumberOfPlayers >= gs->GetMinNumberOfPlayers() && CurrNumberOfPlayers <= gs->GetMaxNumberOfPlayers();
+		bNumberOfPlayersValid? StartGameButton->SetIsEnabled(true) : StartGameButton->SetIsEnabled(false);
 	}
 }
 
@@ -141,10 +136,10 @@ void ULobbyMenu::ChangeGameTypeLeft()
 void ULobbyMenu::ChangeGameTypeRight()
 {
 	// Update the CurrentGameTypeIdx value in gamestate. This will also trigger changes in the UI of the other players
-	AGameStateLobby* GameStateLobby = Cast<AGameStateLobby>(UGameplayStatics::GetGameState(GetOwningPlayer()));
-	if(GameStateLobby)
+	AGameStateLobby* gs = Cast<AGameStateLobby>(UGameplayStatics::GetGameState(GetOwningPlayer()));
+	if(gs)
 	{
-		GameStateLobby->Server_ChangeGameType(1);
+		gs->Server_ChangeGameType(1);
 	}
 }
 

@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "CharacterRPS.generated.h"
 
+class UWidgetComponent;
+
 UCLASS()
 class OLME_API ACharacterRPS : public ACharacter
 {
@@ -25,5 +27,8 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UPROPERTY(VisibleDefaultsOnly)
+	TObjectPtr<UWidgetComponent> WidgetComponent;
 
 };

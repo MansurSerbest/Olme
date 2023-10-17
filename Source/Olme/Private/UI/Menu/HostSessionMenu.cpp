@@ -4,33 +4,42 @@
 #include "UI/Menu/HostSessionMenu.h"
 
 #include "OnlineSessionFunctions.h"
+#include "Base/GameInstance/GameInstanceOlme.h"
 #include "GameFramework/OnlineSession.h"
 #include "Kismet/GameplayStatics.h"
+#include "Olme/Olme.h"
 #include "OnlineSessionManager/Public/SessionSubsystem.h"
 
 void UHostSessionMenu::NativeConstruct()
 {
 	Super::NativeConstruct();
-
-	USessionSubsystem* SessionSubsystem = UOnlineSessionFunctions::GetSessionSubsystem(GetOwningPlayer());
-	if(IsValid(SessionSubsystem))
-	{
-		SessionSubsystem->OnCreateSessionCompleteEvent.AddDynamic(this, &UHostSessionMenu::OnCreateSession);
-	}
 	
 	HostSessionBtn->OnClicked.AddDynamic(this, &UHostSessionMenu::OnPressedHostSessionBtn);
 }
 
 void UHostSessionMenu::OnPressedHostSessionBtn()
 {
-	UOnlineSessionFunctions::CreateSession(GetWorld(), 6, true);
+	if(USessionSubsystem* SessionSubsystem = UOnlineSessionFunctions::GetSessionSubsystem(GetOwningPlayer()))
+	{
+		SessionSubsystem->OnCreateSessionCompleteEvent.AddDynamic(this, &UHostSessionMenu::OnCreateSession);
+		UOnlineSessionFunctions::CreateSession(GetWorld(), 6, true);
+	}
 }
 
 void UHostSessionMenu::OnCreateSession(bool Success)
 {
+	if(USessionSubsystem* SessionSubsystem = UOnlineSessionFunctions::GetSessionSubsystem(GetOwningPlayer()))
+	{
+		SessionSubsystem->OnCreateSessionCompleteEvent.RemoveDynamic(this, &UHostSessionMenu::OnCreateSession);
+	}
+	
 	if(Success)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("ON CREATE SESSION SUCCESSFUL"));
-		UGameplayStatics::OpenLevel(GetOwningPlayer(), FName(TEXT("MAP_Lobby")), true, TEXT("listen"));
+		if(UGameInstanceOlme* Instance = Cast<UGameInstanceOlme>(UGameplayStatics::GetGameInstance(GetOwningPlayer())))
+		{
+			UE_LOG(LogOlme, Log, TEXT("UHostSessionMenu::OnCreateSession: ON CREATE SESSION SUCCESSFUL"));
+			UGameplayStatics::OpenLevelBySoftObjectPtr(GetOwningPlayer(), Instance->GetLobbyMap(), true, TEXT("listen"));
+		}
+
 	}
 }

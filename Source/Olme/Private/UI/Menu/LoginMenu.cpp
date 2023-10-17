@@ -101,7 +101,7 @@ void ULoginMenu::AutoLoginWithPlayfab()
 				UserName = TEXT("saricari92");
 				break;
 			case 1:
-				UserName = TEXT("neskek92");
+				UserName = TEXT("neskekgames");
 				break;
 			case 2:
 				UserName = TEXT("manser92");
@@ -130,7 +130,7 @@ void ULoginMenu::AutoLoginWithEpicGames()
 				Credentials.Token = TEXT("NeskekGames");
 				break;
 			case 1:
-				Credentials.Token = TEXT("MansurSerbest");
+				Credentials.Token = TEXT("ManSer92");
 				break;
 			case 2:
 				Credentials.Token = TEXT("Saricari92");

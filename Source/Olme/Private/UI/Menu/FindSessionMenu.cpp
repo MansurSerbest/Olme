@@ -15,15 +15,15 @@ void UFindSessionMenu::Setup()
 void UFindSessionMenu::NativeConstruct()
 {
 	Super::NativeConstruct();
-	
-	if(USessionSubsystem* Subsystem = UOnlineSessionFunctions::GetSessionSubsystem(GetOwningPlayer()))
-	{
-		Subsystem->OnFindSessionsCompleteEvent.AddUObject(this, &UFindSessionMenu::OnSessionFound);
-	}
 }
 
 void UFindSessionMenu::OnSessionFound(const TArray<FOnlineSessionSearchResult>& SessionResults, bool Successful) const
 {
+	if(USessionSubsystem* Subsystem = UOnlineSessionFunctions::GetSessionSubsystem(GetOwningPlayer()))
+	{
+		Subsystem->OnFindSessionsCompleteEvent.Remove(FindSessionCompleteHandle);
+	}
+	
 	for(const FOnlineSessionSearchResult& Result : SessionResults)
 	{
 		if(USessionResultEntry* Entry = CreateWidget<USessionResultEntry>(GetOwningPlayer(), SessionResultType, NAME_Name))
@@ -32,9 +32,21 @@ void UFindSessionMenu::OnSessionFound(const TArray<FOnlineSessionSearchResult>& 
 			ListOfSessions->AddChild(Entry);
 		}
 	}
+
+	UE_LOG(LogTemp, Warning, TEXT("All Children: \n"));
+	for(const auto i : ListOfSessions->GetAllChildren())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s\n"), *i->GetName());
+	}
 }
 
 void UFindSessionMenu::FindSessions()
 {
-	UOnlineSessionFunctions::FindSessions(GetOwningPlayer(), 10, true);
+	ListOfSessions->ClearChildren();
+
+	if(USessionSubsystem* Subsystem = UOnlineSessionFunctions::GetSessionSubsystem(GetOwningPlayer()))
+	{
+		FindSessionCompleteHandle = Subsystem->OnFindSessionsCompleteEvent.AddUObject(this, &UFindSessionMenu::OnSessionFound);
+		UOnlineSessionFunctions::FindSessions(GetOwningPlayer(), 10, true);
+	}
 }

@@ -9,6 +9,7 @@
 
 #include "SessionSubsystem.generated.h"
 
+struct FOnlineSessionSettingsProxy;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCSOnCreateSessionComplete, bool, bIsSuccess);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCSOnUpdateSessionComplete, bool, bIsSuccess);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCSOnStartSessionComplete, bool, bIsSuccess);
@@ -39,7 +40,7 @@ public:
 	/*
 	 * Calls interface function to update a session
 	 */
-	void UpdateSession();
+	void UpdateSession(const FOnlineSessionSettingsProxy& Settings);
 	FCSOnUpdateSessionComplete OnUpdateSessionCompleteEvent;
 
 	/*

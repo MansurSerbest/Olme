@@ -28,4 +28,7 @@ private:
 protected:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UButton* HostSessionBtn;
+
+private:
+	FDelegateHandle OnCreateSessionCompleteHandle;
 };

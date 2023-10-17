@@ -2,8 +2,7 @@
 
 
 #include "OnlineSessionFunctions.h"
-
-#include "OnlineSubsystemUtils.h"
+#include "OnlineSessionStructs.h"
 #include "Kismet/GameplayStatics.h"
 
 USessionSubsystem* UOnlineSessionFunctions::GetSessionSubsystem(const UObject* WorldContextObject)
@@ -23,11 +22,11 @@ void UOnlineSessionFunctions::CreateSession(const UObject* WorldContextObject, i
 	}
 }
 
-void UOnlineSessionFunctions::UpdateSession(const UObject* WorldContextObject)
+void UOnlineSessionFunctions::UpdateSession(const UObject* WorldContextObject, const FOnlineSessionSettingsProxy& Settings)
 {
 	if(USessionSubsystem* SessionSubsystem = GetSessionSubsystem(WorldContextObject))
 	{
-		SessionSubsystem->UpdateSession();
+		SessionSubsystem->UpdateSession(Settings);
 	}
 }
 

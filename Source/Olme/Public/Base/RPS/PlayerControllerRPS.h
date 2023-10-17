@@ -14,5 +14,9 @@ class OLME_API APlayerControllerRPS : public APlayerControllerTurnBased
 {
 	GENERATED_BODY()
 
+public:
 	APlayerControllerRPS();
+
+	UFUNCTION(Client, Reliable)
+	void LeaveGame();
 };
