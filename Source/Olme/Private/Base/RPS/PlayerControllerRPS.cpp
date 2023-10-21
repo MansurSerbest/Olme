@@ -14,6 +14,12 @@ APlayerControllerRPS::APlayerControllerRPS()
 	bAutoManageActiveCameraTarget = false;
 }
 
+void APlayerControllerRPS::SetupInputComponent()
+{
+	Super::SetupInputComponent();
+	
+}
+
 void APlayerControllerRPS::LeaveGame_Implementation()
 {
 	if(UGameInstanceOlme* Instance = Cast<UGameInstanceOlme>(UGameplayStatics::GetGameInstance(this)))

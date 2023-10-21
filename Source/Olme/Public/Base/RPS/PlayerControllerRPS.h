@@ -17,6 +17,10 @@ class OLME_API APlayerControllerRPS : public APlayerControllerTurnBased
 public:
 	APlayerControllerRPS();
 
+protected:
+	virtual void SetupInputComponent() override;
+
+public:
 	UFUNCTION(Client, Reliable)
 	void LeaveGame();
 };

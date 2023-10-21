@@ -12,7 +12,6 @@ ACharacterRPS::ACharacterRPS()
 	PrimaryActorTick.bCanEverTick = true;
 
 	WidgetComponent = CreateDefaultSubobject<UWidgetComponent>(FName(TEXT("WidgetComponent")));
-
 }
 
 // Called when the game starts or when spawned
