@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Base/TurnBased/PlayerStateTurnBased.h"
-#include "PlayerStaterps.generated.h"
+#include "PlayerStateRPS.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class OLME_API APlayerStaterps : public APlayerStateTurnBased
+class OLME_API APlayerStateRPS : public APlayerStateTurnBased
 {
 	GENERATED_BODY()
 	

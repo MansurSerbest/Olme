@@ -1,5 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Base/RPS/PlayerStaterps.h"
+#include "Base/RPS/PlayerStateRPS.h"
 
