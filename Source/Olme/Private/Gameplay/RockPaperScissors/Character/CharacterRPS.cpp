@@ -3,7 +3,11 @@
 
 #include "Gameplay/RockPaperScissors/Character/CharacterRPS.h"
 
+#include "EnhancedInputComponent.h"
 #include "Components/WidgetComponent.h"
+#include "Gameplay/RockPaperScissors/Input/RPSInputDataAsset.h"
+#include "Olme/Olme.h"
+
 
 // Sets default values
 ACharacterRPS::ACharacterRPS()
@@ -33,5 +37,17 @@ void ACharacterRPS::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	const URPSInputDataAsset* InputActions = NewObject<URPSInputDataAsset>();
+	UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
+	
+	if(EnhancedInputComponent && InputActions)
+	{
+		EnhancedInputComponent->BindAction(InputActions->Choose, ETriggerEvent::Triggered, this, &ACharacterRPS::Choose);
+	}
+}
+
+void ACharacterRPS::Choose(const FInputActionInstance& Action)
+{
+	UE_LOG(LogOlme, Warning, TEXT("ACharacterRPS::Choose(const FInputActionInstance& Action)"));
 }
 

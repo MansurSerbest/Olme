@@ -7,6 +7,8 @@
 #include "CharacterRPS.generated.h"
 
 class UWidgetComponent;
+class UInputMappingContext;
+struct FInputActionInstance;
 
 UCLASS()
 class OLME_API ACharacterRPS : public ACharacter
@@ -28,6 +30,10 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
-	UPROPERTY(VisibleDefaultsOnly)
+private:
+	void Choose(const FInputActionInstance& Action);
+
+protected:
+	UPROPERTY(VisibleDefaultsOnly, Category = "UI")
 	TObjectPtr<UWidgetComponent> WidgetComponent;
 };

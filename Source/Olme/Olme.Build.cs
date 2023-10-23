@@ -13,6 +13,7 @@ public class Olme : ModuleRules
 			"Core"
 			, "CoreUObject"
 			, "Engine"
+			, "EnhancedInput"
 			, "InputCore"
 			, "UMG"
 			, "UISystem"
