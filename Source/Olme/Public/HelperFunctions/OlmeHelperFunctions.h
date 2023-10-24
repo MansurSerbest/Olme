@@ -21,4 +21,7 @@ public:
 	// Makes sure that after the shift of the idx value, the idx value will stay between [0, Size[
 	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
 	static int32 ShiftInRotation(const int Size, const int Direction, int Idx);
+
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+	static bool IsPawnLocallyOwned(const APawn* Pawn);
 };

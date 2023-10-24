@@ -40,13 +40,23 @@ void ACharacterRPS::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 void ACharacterRPS::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	// Set the rotation of the widget component
 	if(const AActor* Camera = UGameplayStatics::GetActorOfClass(this, ACameraActor::StaticClass()))
 	{
 		const FVector Direction = Camera->GetActorLocation() - WidgetComponent->GetComponentLocation();
 		const FRotator newRotation = Direction.Rotation();
 
 		WidgetComponent->SetWorldRotation(newRotation);
+	}
+
+	// Set the choice of the other player to unknown
+	if(!UOlmeHelperFunctions::IsPawnLocallyOwned(this))
+	{
+		if(UWidgetRPSCharacter* Widget = Cast<UWidgetRPSCharacter>(WidgetComponent->GetWidget()))
+		{
+			Widget->SetChoice(ERockPaperScissors::eMax);
+		}
 	}
 }
 

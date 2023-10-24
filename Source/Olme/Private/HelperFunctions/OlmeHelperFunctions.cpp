@@ -56,3 +56,15 @@ int32 UOlmeHelperFunctions::ShiftInRotation(const int Size, const int Direction,
 
 	return Idx;
 }
+
+bool UOlmeHelperFunctions::IsPawnLocallyOwned(const APawn* Pawn)
+{
+	if(APlayerController* PC = Cast<APlayerController>(Pawn->GetController()))
+	{
+		return PC->IsLocalController();
+	}
+
+	// If this is called on a client and the Pawn is another client pawn, the cast to APlayerController will return nullptr because Playercontrollers of other
+	// Players don't exist on clients' machines
+	return false;
+}
