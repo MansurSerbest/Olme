@@ -18,21 +18,24 @@ class OLME_API UWidgetRPSCharacter : public UUserWidget
 {
 	GENERATED_BODY()
 
+public:
+	void SetChoice(const ERockPaperScissors NewChoice);
+
 protected:
 	virtual void NativeConstruct() override;
 
 	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
-	UTextBlock* PlayerName;
+	TObjectPtr<UTextBlock> PlayerName;
 
 	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
-	UImage* LeftArrow;
+	TObjectPtr<UImage> LeftArrow;
 
 	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
-	UImage* RightArrow;
+	TObjectPtr<UImage> RightArrow;
 
 	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
-	UImage* Choice;
+	TObjectPtr<UImage> Choice;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Textures")
-	TMap<ERockPaperScissors, TSoftObjectPtr<UTexture2D>> RPSTextures;
+	TMap<ERockPaperScissors, TObjectPtr<UTexture2D>> RPSTextures;
 };

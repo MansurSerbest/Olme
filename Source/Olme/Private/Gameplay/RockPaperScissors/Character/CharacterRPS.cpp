@@ -4,8 +4,14 @@
 #include "Gameplay/RockPaperScissors/Character/CharacterRPS.h"
 
 #include "EnhancedInputComponent.h"
+#include "Algo/Rotate.h"
+#include "Camera/CameraActor.h"
 #include "Components/WidgetComponent.h"
 #include "Gameplay/RockPaperScissors/Input/RPSInputDataAsset.h"
+#include "Gameplay/RockPaperScissors/UI/WidgetRPSCharacter.h"
+#include "HelperFunctions/OlmeHelperFunctions.h"
+#include "Kismet/GameplayStatics.h"
+#include "Net/UnrealNetwork.h"
 #include "Olme/Olme.h"
 
 
@@ -16,6 +22,18 @@ ACharacterRPS::ACharacterRPS()
 	PrimaryActorTick.bCanEverTick = true;
 
 	WidgetComponent = CreateDefaultSubobject<UWidgetComponent>(FName(TEXT("WidgetComponent")));
+	if(WidgetComponent)
+	{
+		WidgetComponent->SetupAttachment(GetRootComponent());
+		WidgetComponent->SetCastShadow(false); // We don't need shadow for this
+	}
+}
+
+void ACharacterRPS::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ACharacterRPS, Choice);
 }
 
 // Called when the game starts or when spawned
@@ -23,6 +41,13 @@ void ACharacterRPS::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	if(const AActor* Camera = UGameplayStatics::GetActorOfClass(this, ACameraActor::StaticClass()))
+	{
+		const FVector Direction = Camera->GetActorLocation() - WidgetComponent->GetComponentLocation();
+		const FRotator newRotation = Direction.Rotation();
+
+		WidgetComponent->SetWorldRotation(newRotation);
+	}
 }
 
 // Called every frame
@@ -48,6 +73,12 @@ void ACharacterRPS::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 void ACharacterRPS::Choose(const FInputActionInstance& Action)
 {
-	UE_LOG(LogOlme, Warning, TEXT("ACharacterRPS::Choose(const FInputActionInstance& Action)"));
+	const float value = Action.GetValue().Get<float>();
+	const int32 currChoice = static_cast<int8>(Choice);
+	int32 result = UOlmeHelperFunctions::ShiftInRotation(static_cast<int32>(ERockPaperScissors::eMax), value, currChoice);
+
+	Choice = static_cast<ERockPaperScissors>(result);
+	UE_LOG(LogOlme, Warning, TEXT("NEW CHOICE %d"), result);
 }
+
 

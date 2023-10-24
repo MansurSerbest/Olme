@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Gameplay/RockPaperScissors/RPSStructs.h"
 #include "CharacterRPS.generated.h"
 
 class UWidgetComponent;
@@ -23,7 +24,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -34,6 +35,9 @@ private:
 	void Choose(const FInputActionInstance& Action);
 
 protected:
-	UPROPERTY(VisibleDefaultsOnly, Category = "UI")
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
 	TObjectPtr<UWidgetComponent> WidgetComponent;
+
+	UPROPERTY(Replicated)
+	ERockPaperScissors Choice;
 };
