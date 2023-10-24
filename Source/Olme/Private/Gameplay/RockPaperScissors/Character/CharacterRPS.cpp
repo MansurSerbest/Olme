@@ -79,6 +79,12 @@ void ACharacterRPS::Choose(const FInputActionInstance& Action)
 
 	Choice = static_cast<ERockPaperScissors>(result);
 	UE_LOG(LogOlme, Warning, TEXT("NEW CHOICE %d"), result);
+
+	if(WidgetComponent)
+	{
+		UWidgetRPSCharacter* Widget =  Cast<UWidgetRPSCharacter>(WidgetComponent->GetWidget());
+		Widget->SetChoice(Choice);
+	}
 }
 
 
