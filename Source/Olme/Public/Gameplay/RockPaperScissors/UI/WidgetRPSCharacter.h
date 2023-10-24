@@ -21,6 +21,8 @@ class OLME_API UWidgetRPSCharacter : public UUserWidget
 public:
 	void SetChoice(const ERockPaperScissors NewChoice);
 
+	void SetName(const FString& NewName);
+
 protected:
 	virtual void NativeConstruct() override;
 

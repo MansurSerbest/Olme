@@ -5,6 +5,7 @@
 
 #include "EnhancedInputComponent.h"
 #include "Algo/Rotate.h"
+#include "Base/RPS/PlayerStateRPS.h"
 #include "Camera/CameraActor.h"
 #include "Components/WidgetComponent.h"
 #include "Gameplay/RockPaperScissors/Input/RPSInputDataAsset.h"
@@ -29,6 +30,14 @@ ACharacterRPS::ACharacterRPS()
 	}
 }
 
+void ACharacterRPS::SetCharacterName(const FString& Name)
+{
+	if(UWidgetRPSCharacter* Widget = Cast<UWidgetRPSCharacter>(WidgetComponent->GetWidget()))
+	{
+		Widget->SetName(Name);
+	}
+}
+
 void ACharacterRPS::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -50,12 +59,18 @@ void ACharacterRPS::BeginPlay()
 		WidgetComponent->SetWorldRotation(newRotation);
 	}
 
-	// Set the choice of the other player to unknown
-	if(!UOlmeHelperFunctions::IsPawnLocallyOwned(this))
+	if(UWidgetRPSCharacter* Widget = Cast<UWidgetRPSCharacter>(WidgetComponent->GetWidget()))
 	{
-		if(UWidgetRPSCharacter* Widget = Cast<UWidgetRPSCharacter>(WidgetComponent->GetWidget()))
+		// Set the choice of the other player to unknown
+		if(!UOlmeHelperFunctions::IsPawnLocallyOwned(this))
 		{
 			Widget->SetChoice(ERockPaperScissors::eMax);
+		}
+
+		// Set the name of the player
+		if(const APlayerStateRPS* PS = Cast<APlayerStateRPS>(GetPlayerState()))
+		{
+			Widget->SetName(PS->GetCustomName());
 		}
 	}
 }
@@ -86,10 +101,8 @@ void ACharacterRPS::Choose(const FInputActionInstance& Action)
 	const float value = Action.GetValue().Get<float>();
 	const int32 currChoice = static_cast<int8>(Choice);
 	int32 result = UOlmeHelperFunctions::ShiftInRotation(static_cast<int32>(ERockPaperScissors::eMax), value, currChoice);
-
 	Choice = static_cast<ERockPaperScissors>(result);
-	UE_LOG(LogOlme, Warning, TEXT("NEW CHOICE %d"), result);
-
+	
 	if(WidgetComponent)
 	{
 		UWidgetRPSCharacter* Widget =  Cast<UWidgetRPSCharacter>(WidgetComponent->GetWidget());

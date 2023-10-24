@@ -13,5 +13,12 @@ UCLASS()
 class OLME_API APlayerStateRPS : public APlayerStateTurnBased
 {
 	GENERATED_BODY()
+
+public:
+	APlayerStateRPS();
 	
+	virtual void Tick(float DeltaSeconds) override;
+
+protected:
+	virtual void OnRep_CustomName() override;
 };

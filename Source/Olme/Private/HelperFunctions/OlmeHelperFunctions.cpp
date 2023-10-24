@@ -24,19 +24,19 @@ void UOlmeHelperFunctions::PrintNetMode(const UObject* WorldContextObject, const
 	switch (World->GetNetMode())
 	{
 	case NM_ListenServer:
-		UE_LOG(LogOlme, Log, TEXT("[%d]: %s called on NM_ListenServer!"), PlayerNr, *Text);
+		UE_LOG(LogOlme, Log, TEXT("[NM_ListenServer][%d]: %s!"), PlayerNr, *Text);
 		break;
 	case NM_Client:
-		UE_LOG(LogOlme, Log, TEXT("[%d]: %s called on NM_Client!"),PlayerNr, *Text);
+		UE_LOG(LogOlme, Log, TEXT("[NM_Client][%d]: %s!"),PlayerNr, *Text);
 		break;
 	case NM_Standalone:
-		UE_LOG(LogOlme, Log, TEXT("[%d]: %s on NM_Standalone!"),PlayerNr, *Text);
+		UE_LOG(LogOlme, Log, TEXT("[NM_Standalone][%d]: %s!"),PlayerNr, *Text);
 		break;
 	case NM_DedicatedServer:
-		UE_LOG(LogOlme, Log, TEXT("[%d]: %s on NM_DedicatedServer!"),PlayerNr, *Text);
+		UE_LOG(LogOlme, Log, TEXT("[NM_DedicatedServer][%d]: %s!"),PlayerNr, *Text);
 		break;
 	case NM_MAX:
-		UE_LOG(LogOlme, Log, TEXT("[%d]: %s on NM_MAX!"),PlayerNr, *Text);
+		UE_LOG(LogOlme, Log, TEXT("[NM_MAX][%d]: %s!"),PlayerNr, *Text);
 		break;
 	}
 }

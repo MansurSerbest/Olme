@@ -14,7 +14,7 @@ void APlayerStateTurnBased::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(APlayerStateTurnBased, Name);
+	DOREPLIFETIME(APlayerStateTurnBased, CustomName);
 }
 
 void APlayerStateTurnBased::BeginPlay()
@@ -29,22 +29,33 @@ void APlayerStateTurnBased::BeginPlay()
 		return;
 	}
 
-	// Get the name and call a function only on server
-	Name = UAccountManagerFunctions::GetCachedUsername(this);
-	SetName_Server(Name);
+	// Set the name and call it properly in server if necessary
+	const ENetMode NM = GetNetMode();
+	if(NM == NM_Client)
+	{
+		if(GetPlayerController() && GetPlayerController()->IsLocalController())
+		{
+			CustomName = UAccountManagerFunctions::GetCachedUsername(this);
+			OnRep_CustomName();
+			SetName_Server(CustomName); // We need to update the name in the server too
+		}
+	}
+	else if(NM == NM_ListenServer)
+	{
+		if(GetPlayerController() && GetPlayerController()->IsLocalController())
+		{
+			CustomName = UAccountManagerFunctions::GetCachedUsername(this);
+			OnRep_CustomName();
+		}
+	}
 }
 
-void APlayerStateTurnBased::OnRep_Name()
+void APlayerStateTurnBased::OnRep_CustomName()
 {
-	ACharacterRPS* Pawn = Cast<ACharacterRPS>(GetPawn());
-	if(Pawn)
-	{
-		UE_LOG(LogOlme, Log, TEXT("Name of %s is %s"), *GetName(), *Name);
-	}
 }
 
 void APlayerStateTurnBased::SetName_Server_Implementation(const FString& NewName)
 {
-	Name = NewName;
-	OnRep_Name();
+	CustomName = NewName;
+	OnRep_CustomName(); // Call this because OnRep is only called in client
 }

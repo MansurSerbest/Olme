@@ -20,6 +20,8 @@ public:
 	// Sets default values for this character's properties
 	ACharacterRPS();
 
+	void SetCharacterName(const FString& Name);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
