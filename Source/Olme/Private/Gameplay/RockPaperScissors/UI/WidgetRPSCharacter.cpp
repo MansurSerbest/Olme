@@ -8,9 +8,9 @@
 
 void UWidgetRPSCharacter::SetChoice(const ERockPaperScissors NewChoice)
 {
-	if(Choice)
+	if(MainImage)
 	{
-		Choice->SetBrushFromTexture(RPSTextures[NewChoice]);
+		MainImage->SetBrushFromTexture(RPSTextures[NewChoice]);
 	}
 }
 
@@ -19,6 +19,22 @@ void UWidgetRPSCharacter::SetName(const FString& NewName)
 	if(PlayerName)
 	{
 		PlayerName->SetText(FText::FromString(NewName));
+	}
+}
+
+void UWidgetRPSCharacter::SetScore(const float NewScore)
+{
+	if(Score)
+	{
+		Score->SetText(FText::Format(FText::FromString("{0}"), NewScore));
+	}
+}
+
+void UWidgetRPSCharacter::SetCheckbox(const bool bMarked)
+{
+	if(MainImage)
+	{
+		bMarked? MainImage->SetBrushFromTexture(CheckBoxMarked) : MainImage->SetBrushFromTexture(CheckBoxUnmarked);
 	}
 }
 

@@ -20,8 +20,20 @@ public:
 	// Sets default values for this character's properties
 	ACharacterRPS();
 
+	UFUNCTION(Server, Reliable)
+	void SetChoice_Server(const ERockPaperScissors NewChoice);
+
 	void SetCharacterName(const FString& Name);
 
+	void SetScore(const float NewScore);
+
+	static ACharacterRPS* ResolveWinner(ACharacterRPS* PlayerOne, ACharacterRPS* PlayerTwo);
+
+	void SetCheckBoxes(const bool bVisible);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void StartRound();
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -35,6 +47,8 @@ public:
 
 private:
 	void Choose(const FInputActionInstance& Action);
+
+	void Confirm(const FInputActionInstance& Action);
 
 protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
