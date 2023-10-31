@@ -146,7 +146,7 @@ void UAccountManagerSubsystem::LoginEpicGamesAccount()
 		}
  
 		Identity->ClearOnLoginCompleteDelegate_Handle(LocalUserNum, LoginDelegateHandle);
-		LoginDelegateHandle.Reset();
+		//LoginDelegateHandle.Reset(); For some reason, this makes the game fatal error TODO: Investigate this
 	});
 	
 	LoginDelegateHandle = Identity->AddOnLoginCompleteDelegate_Handle(0, OnLoginCompleteDelegate);
@@ -222,7 +222,7 @@ void UAccountManagerSubsystem::LoginWithCredentialsEpicGamesAccount(const FOnlin
 		}
  
 		Identity->ClearOnLoginCompleteDelegate_Handle(LocalUserNum, LoginDelegateHandle);
-		LoginDelegateHandle.Reset();
+		//LoginDelegateHandle.Reset(); For some reason, this makes the game fatal error TODO: Investigate this
 	});
 	LoginDelegateHandle = Identity->AddOnLoginCompleteDelegate_Handle(0, OnLoginCompleteDelegate);
 	
