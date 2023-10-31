@@ -10,7 +10,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
 #include "Olme/Olme.h"
-#include "UI/Menu/LobbyMenu.h"
+#include "Gameplay/Lobby/UI/LobbyMenu.h"
 
 void AGameStateLobby::BeginPlay()
 {

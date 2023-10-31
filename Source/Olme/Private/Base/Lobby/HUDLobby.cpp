@@ -5,7 +5,7 @@
 
 #include "UISystemFunctions.h"
 #include "Blueprint/UserWidget.h"
-#include "UI/Menu/LobbyMenu.h"
+#include "Gameplay/Lobby/UI/LobbyMenu.h"
 
 void AHUDLobby::TryCreateLobbyMenu()
 {

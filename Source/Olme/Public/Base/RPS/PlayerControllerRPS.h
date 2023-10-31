@@ -6,6 +6,8 @@
 #include "Base/TurnBased/PlayerControllerTurnBased.h"
 #include "PlayerControllerRPS.generated.h"
 
+class URPSInputDataAsset;
+class UInputMappingContext;
 /**
  * 
  */
@@ -15,8 +17,16 @@ class OLME_API APlayerControllerRPS : public APlayerControllerTurnBased
 	GENERATED_BODY()
 
 public:
-	APlayerControllerRPS();
+	APlayerControllerRPS(const FObjectInitializer & ObjectInitializer);
 
+protected:
+	virtual void SetupInputComponent() override;
+
+public:
 	UFUNCTION(Client, Reliable)
 	void LeaveGame();
+
+private:
+	UPROPERTY()
+	TObjectPtr<UInputMappingContext> InputMappingContext;
 };
