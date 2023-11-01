@@ -37,7 +37,7 @@ void UHostSessionMenu::OnCreateSession(bool Success)
 		if(UGameInstanceOlme* Instance = Cast<UGameInstanceOlme>(UGameplayStatics::GetGameInstance(GetOwningPlayer())))
 		{
 			UE_LOG(LogOlme, Log, TEXT("UHostSessionMenu::OnCreateSession: ON CREATE SESSION SUCCESSFUL"));
-			UGameplayStatics::OpenLevelBySoftObjectPtr(GetOwningPlayer(), Instance->GetLobbyMap(), true, TEXT("listen"));
+			UGameplayStatics::OpenLevelBySoftObjectPtr(GetOwningPlayer(), Instance->GetLobbyMap(), true, TEXT("listen?bIsLanMatch=1"));
 		}
 
 	}
